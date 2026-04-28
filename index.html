@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#f97316" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,9 +19,6 @@
     <meta name="keywords" content="คิวพลัส, Q-Plus,เว็บแอพจัดการคิวพนักงาน" />
     <meta name="author" content="Sumett Ampornsak" />
     <title>คิวพลัส | จัดการคิวพนักงาน</title>
-    <link rel="icon"
-        href="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png"
-        type="image/x-icon" />
     <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <!-- Google Fonts: Kanit + IBM Plex Mono -->
@@ -705,23 +702,140 @@
             gap: 6px;
         }
 
+        /* --- ปรับปรุง footer สำหรับแท็บเกี่ยวกับ --- */
         .footer-content {
             backdrop-filter: blur(8px);
-            border: 3px solid var(--accent3);
-            box-shadow: 0 -4px 20px var(--accent);
+            border-radius: 42px;
+            margin: 2rem auto 1rem;
+            max-width: 360px;
+            transition: all 0.2s ease;
+        }
+
+        .about-card {
+            background: linear-gradient(145deg, var(--surface), var(--surface2));
+            border: 1px solid rgba(249, 115, 22, 0.25);
+            border-radius: 40px;
+            padding: 1.8rem 1.2rem 1.4rem;
+            text-align: center;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .about-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .app-icon-wrap {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(234, 179, 8, 0.1));
+            padding: 6px;
+            border-radius: 36px;
+            margin-bottom: 16px;
+        }
+
+        .app-icon-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 28px;
+            background: var(--surface3);
+            padding: 8px;
+            transition: all 0.2s;
+        }
+
+        .app-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--gold));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0.5rem 0 0.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .app-desc {
+            font-size: 0.75rem;
+            color: var(--text3);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .version-chip {
+            background: var(--surface3);
             border-radius: 50px;
-            margin-top: 200px;
+            padding: 0.25rem 0.85rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent2);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .update-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            padding: 0.5rem 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: var(--text2);
+            backdrop-filter: blur(4px);
+            margin-top: 8px;
+        }
+
+        .update-info i {
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        .developer-credit {
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            color: var(--text3);
+            border-top: 1px dashed var(--border);
+            padding-top: 0.9rem;
+            display: inline-flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .developer-credit span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .stat-footer {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 0.9rem;
+            background: transparent;
+            border: none;
+            padding: 0;
             text-align: center;
-            border-radius: 50px;
-
+            border-radius: 0;
         }
-        
+
+        @media (max-width: 480px) {
+            .app-icon-img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .app-name {
+                font-size: 1.5rem;
+            }
+
+            .footer-content {
+                margin: 1rem auto 0.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -829,7 +943,7 @@
                     <i class="bi bi-clipboard-fill"></i> คัดลอกข้อความ
                 </button>
                 <button class="btn btn-ghost btn-icon" id="saveHistBtn" title="บันทึกลงประวัติ">
-                    <i class="bi bi-archive"></i> บันทึกลงประวัติ   
+                    <i class="bi bi-archive"></i> บันทึกลงประวัติ
                 </button>
             </div>
         </div>
@@ -873,20 +987,36 @@
         </div>
     </div>
 
+    <!-- แท็บเกี่ยวกับ : ปรับปรุง footer ให้สวยงาม -->
     <div class="tab-panel" id="tab-about">
-        <div class="footer-content">
-            <div class="stat-footer">
-                <div >
-                    <img src="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png" alt="Logo" style="width-max: 200px; height: 300px;"></div>
-                <div class="stat-lbl">เวอร์ชัน 4.5.0</div>
-                <div class="text-muted small d-flex align-items-center gap-1 ms-md-2">
-                    <i class="fas fa-sync-alt fa-xs opacity-75"></i>
-                    <span>อัปเดตล่าสุด: 28 เมษายน 2569</span>
+        <div class="content">
+            <div class="footer-content" data-aos="fade-up" data-aos-duration="600">
+                <div class="about-card">
+                    <div class="app-icon-wrap">
+                        <img class="app-icon-img"
+                            src="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png"
+                            alt="Q-Plus Logo">
+                    </div>
+                    <div class="app-name">คิวพลัส</div>
+                    <div class="app-desc">
+                        <span><i class="bi bi-grid-3x3-gap-fill"></i> จัดการคิวอัจฉริยะ</span>
+                        <span><i class="bi bi-people-fill"></i> รองรับทีมงาน</span>
+                    </div>
+                    <div class="version-chip">
+                        <i class="bi bi-tag-fill"></i> เวอร์ชัน 5.7.0
+                    </div>
+                    <div class="update-info">
+                        <i class="fas fa-sync-alt fa-xs"></i>
+                        <span>อัปเดตล่าสุด: 29 เมษายน 2569</span>
+                    </div>
+                    <div class="developer-credit">
+                        <span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span>
+                        <span><i class="bi bi-envelope-fill"></i> support@qplus.app</span>
+                        <span><i class="bi bi-shield-check"></i> ปลอดภัย</span>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
     </div>
 
     <div class="modal-overlay" id="editModal">
@@ -1089,7 +1219,7 @@
                     const currentEmp = state.selections[pos.id];
                     const card = document.createElement("div");
                     card.className = `pos-card ${isActive ? "" : "inactive"} ${currentEmp ? "assigned" : ""}`;
-                    const toggleIcon = isActive ? "bi-power" : "bi-power"; // ใช้ไอคอน power เดิม แต่เปลี่ยนสไตล์ active
+                    const toggleIcon = isActive ? "bi-power" : "bi-power";
                     const toggleActiveClass = isActive ? "active" : "";
                     card.innerHTML = `
                         <div class="pos-label">
@@ -1119,7 +1249,7 @@
                             state.selections[pos.id] = e.target.value;
                             updatePreview();
                             saveState();
-                            renderPositions(); // อัปเดตคลาส assigned
+                            renderPositions();
                         });
                     }
                     const toggleBtn = card.querySelector(".btn-toggle-pos");
