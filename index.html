@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="คิวพลัส">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon"
         href="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png">
     <!-- iOS / Safari Icons -->
@@ -836,6 +837,29 @@
                 margin: 1rem auto 0.5rem;
             }
         }
+
+        .sw-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text3);
+        }
+
+        .sw-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #f87171;
+            /* แดง = offline */
+            box-shadow: 0 0 4px rgba(248, 113, 113, 0.6);
+        }
+
+        .sw-dot.online {
+            background: #4ade80;
+            /* เขียว = online */
+            box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+        }
     </style>
 </head>
 
@@ -1003,7 +1027,7 @@
                         <span><i class="bi bi-people-fill"></i> รองรับทีมงาน</span>
                     </div>
                     <div class="version-chip">
-                        <i class="bi bi-tag-fill"></i> เวอร์ชัน 5.7.0
+                        <i class="bi bi-tag-fill"></i> เวอร์ชัน 6.8.4
                     </div>
                     <div class="update-info">
                         <i class="fas fa-sync-alt fa-xs"></i>
@@ -1109,15 +1133,37 @@
                 if (dot) dot.className = "sw-dot" + (online ? " online" : "");
                 if (lbl) lbl.textContent = online ? "บันทึกอัตโนมัติ" : "โหมดออฟไลน์";
             }
+
+            window.updateSWStatus = updateSWStatus;
+
+            function updateStatusSmart() {
+                const isOnline = navigator.onLine;
+                updateSWStatus(isOnline);
+            }
+
+            window.addEventListener("online", updateStatusSmart);
+            window.addEventListener("offline", updateStatusSmart);
+
+            // ตอนโหลด
+            updateStatusSmart();
+
             async function registerSW() {
-                if (!("serviceWorker" in navigator)) return updateSWStatus(false);
+                if (!("serviceWorker" in navigator)) {
+                    updateSWStatus(false);
+                    return;
+                }
+
                 try {
                     await navigator.serviceWorker.register("sw.js");
+
                     navigator.serviceWorker.addEventListener("message", (e) => {
-                        if (e.data?.type === "READY") updateSWStatus(true);
+                        if (e.data?.type === "READY") {
+                            updateSWStatus(true);
+                        }
                     });
-                    updateSWStatus(true);
-                } catch (_) {
+
+                } catch (err) {
+                    console.error(err);
                     updateSWStatus(false);
                 }
             }
