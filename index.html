@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 
 <head>
@@ -6,20 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#f97316" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="คิวพลัส">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon"
-        href="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png">
-
-        <link rel="icon"
-        href="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png"
-        type="image/x-icon" />
-    <!-- iOS / Safari Icons -->
-    <link rel="apple-touch-icon"
-        href="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png">
-    <meta name="apple-mobile-web-app-title" content="คิวพลัส">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="คิวพลัส" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/Y4nTRWzc/qplus-logo.png" />
+    <link rel="icon" href="https://i.ibb.co/Y4nTRWzc/qplus-logo.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="https://i.ibb.co/Y4nTRWzc/qplus-logo.png" />
+    <meta name="apple-mobile-web-app-title" content="คิวพลัส" />
     <meta name="description" content="คิวพลัส Q-Plus เว็บแอพจัดการคิวพนักงาน" />
     <meta name="keywords" content="คิวพลัส, Q-Plus,เว็บแอพจัดการคิวพนักงาน" />
     <meta name="author" content="Sumett Ampornsak" />
@@ -33,16 +27,22 @@
         href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap"
         rel="stylesheet" />
     <!-- Font-Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
-<link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-database-compat.js"></script>
+
     <style>
+        /* (คงเดิมทั้งหมด ไม่เปลี่ยนแปลง) */
         :root {
-            --bg: #0f0e0b;
-            --surface: #1a1915;
-            --surface2: #222118;
+            --bg: #121212;
+            --surface: #1c1c1b;
+            --surface2: #222222;
             --surface3: #2a2820;
             --border: #302e24;
             --border2: #3d3b2e;
@@ -53,7 +53,7 @@
             --text: #f5f0e8;
             --text2: #c8c0a8;
             --text3: #8a8270;
-            --success: #4ade80;
+            --success: #1aa50d;
             --danger: #f87171;
             --blue: #60a5fa;
             --radius: 14px;
@@ -316,7 +316,7 @@
 
         .btn-success {
             background: linear-gradient(135deg, var(--accent), var(--gold));
-            color: #0f0e0b;
+            color: #0b0f0b;
             font-weight: 700;
             width: 100%;
             justify-content: center;
@@ -363,7 +363,7 @@
         .input:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            background: var(--surface3);
+            background: var(--danger);
         }
 
         .input-row {
@@ -459,10 +459,9 @@
             font-size: 0.7rem;
             font-weight: 700;
             color: var(--text3);
-            font-family: "IBM Plex Mono", monospace;
+
         }
 
-        /* ตำแหน่ง grid + ปุ่มเปิด/ปิด */
         .pos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -586,12 +585,10 @@
 
         .preview-body {
             padding: 1rem;
-            font-family: "IBM Plex Mono", monospace;
             font-size: 0.78rem;
             white-space: pre-wrap;
             word-break: break-word;
             line-height: 1.6;
-            max-height: 300px;
             overflow-y: auto;
             color: var(--text2);
         }
@@ -601,7 +598,6 @@
             bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%) translateY(80px);
-            background: var(--surface3);
             border: 1px solid var(--border2);
             color: var(--text);
             padding: 0.65rem 1.2rem;
@@ -615,6 +611,16 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .toast.success {
+            background: var(--success);
+            border-color: #22c55e;
+        }
+
+        .toast.error {
+            background: var(--danger);
+            border-color: #ef4444;
         }
 
         .toast.show {
@@ -675,7 +681,6 @@
             font-size: 1.6rem;
             font-weight: 700;
             color: var(--accent);
-            font-family: "IBM Plex Mono", monospace;
             line-height: 1;
             margin-bottom: 4px;
         }
@@ -708,7 +713,6 @@
             gap: 6px;
         }
 
-        /* --- ปรับปรุง footer สำหรับแท็บเกี่ยวกับ --- */
         .footer-content {
             backdrop-filter: blur(8px);
             border-radius: 42px;
@@ -820,14 +824,6 @@
             gap: 5px;
         }
 
-        .stat-footer {
-            background: transparent;
-            border: none;
-            padding: 0;
-            text-align: center;
-            border-radius: 0;
-        }
-
         @media (max-width: 480px) {
             .app-icon-img {
                 width: 80px;
@@ -856,13 +852,11 @@
             height: 10px;
             border-radius: 50%;
             background: #f87171;
-            /* แดง = offline */
             box-shadow: 0 0 4px rgba(248, 113, 113, 0.6);
         }
 
         .sw-dot.online {
             background: #4ade80;
-            /* เขียว = online */
             box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
         }
     </style>
@@ -909,7 +903,6 @@
         </button>
     </nav>
 
-
     <div class="tab-panel active" id="tab-assign">
         <div class="content">
             <div class="stats-strip">
@@ -927,9 +920,7 @@
                 </div>
             </div>
             <div class="card">
-                <div class="card-hd">
-                    <i class="bi bi-calendar-event"></i> วันที่ปฏิบัติงาน
-                </div>
+                <div class="card-hd"><i class="bi bi-calendar-event"></i> วันที่ปฏิบัติงาน</div>
                 <div class="date-row">
                     <label>วันที่</label>
                     <input type="date" id="datePicker" class="input" />
@@ -939,41 +930,57 @@
             <div class="card">
                 <div class="card-hd">
                     <i class="bi bi-pc-display"></i> มอบหมายตำแหน่ง
-                    <span class="badge badge-orange" style="margin-left: 8px"> กดปุ่ม <i class="bi bi-power"></i>
+                    <span class="badge badge-orange" style="margin-left: 8px">กดปุ่ม <i class="bi bi-power"></i>
                         เพื่อเปิด/ปิด</span>
                 </div>
                 <div class="pos-grid" id="positionsContainer"></div>
-                <div class="note" style="margin-top: 12px">
-                    <i class="bi bi-info-circle"></i> ปิดตำแหน่ง =
-                    จะไม่แสดงในข้อความและไม่ต้องเลือกพนักงาน
-                </div>
+                <div class="note" style="margin-top: 12px"><i class="bi bi-info-circle"></i> ปิดตำแหน่ง =
+                    จะไม่แสดงในข้อความและไม่ต้องเลือกพนักงาน</div>
             </div>
             <div class="preview-wrap">
                 <div class="preview-hd">
                     <div class="preview-hd-title">
-                        <div class="preview-dot"></div>
-                        ตัวอย่างข้อความ
+                        <div class="preview-dot"></div>ตัวอย่างข้อความ
                     </div>
-                    <button class="btn btn-ghost btn-sm" id="copyBtnSmall">
-                        <i class="bi bi-clipboard-check"></i> คัดลอก
-                    </button>
+                    <button class="btn btn-ghost btn-sm" id="copyBtnSmall"><i class="bi bi-clipboard-check"></i>
+                        คัดลอก</button>
                 </div>
                 <div class="preview-body" id="previewText">กำลังโหลด...</div>
             </div>
-            <div class="card">
+            <div class="card" style="margin-bottom: 0.75rem">
                 <div class="card-hd">
-                    <i class="bi bi-pencil-square"></i> หมายเหตุเพิ่มเติม
+                    <i class="bi bi-lightning-charge-fill"></i> หมายเหตุที่ใช้บ่อย
+                    <span class="badge badge-orange" style="margin-left: auto">กดเพิ่มทันที</span>
                 </div>
+                <div class="quick-notes-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, auto)); gap: 8px; padding: 1rem;">
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 001 ไม่เปิด">⚙️
+                        เครื่อง 001 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 002 ไม่เปิด">⚙️
+                        เครื่อง 002 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 003 ไม่เปิด">⚙️
+                        เครื่อง 003 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 004 ไม่เปิด">⚙️
+                        เครื่อง 004 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 005 ไม่เปิด">⚙️
+                        เครื่อง 005 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 006 ไม่เปิด">⚙️
+                        เครื่อง 006 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 007 ไม่เปิด">⚙️
+                        เครื่อง 007 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn" data-note="เครื่อง 008 ไม่เปิด">⚙️
+                        เครื่อง 008 ไม่เปิด</button>
+                    <button type="button" class="btn btn-ghost btn-sm quick-note-btn"
+                        data-note="เลื่อนตำแหน่งกระโดด (เนื่องจากต้องให้เด็กใหม่เข้าเครื่อง)">เลื่อนตำแหน่งกระโดด</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-hd"><i class="bi bi-pencil-square"></i> หมายเหตุเพิ่มเติม</div>
                 <textarea id="notesTextarea" class="input" rows="3"
                     placeholder="เช่น:&#10;เครื่อง 006 วันนี้ปิดซ่อม&#10;พักเที่ยงร้าน..."></textarea>
             </div>
             <div style="display: flex; gap: 8px; margin-bottom: 1rem">
-                <button class="btn btn-success" id="copyBtn">
-                    <i class="bi bi-clipboard-fill"></i> คัดลอกข้อความ
-                </button>
-                <button class="btn btn-ghost btn-icon" id="saveHistBtn" title="บันทึกลงประวัติ">
-                    <i class="bi bi-archive"></i> บันทึกลงประวัติ
-                </button>
+                <button class="btn btn-success" id="copyBtn"><i class="bi bi-clipboard-fill"></i> คัดลอกข้อความ</button>
             </div>
         </div>
     </div>
@@ -981,22 +988,18 @@
     <div class="tab-panel" id="tab-employees">
         <div class="content">
             <div class="card">
-                <div class="card-hd">
-                    <i class="bi bi-person-plus-fill"></i> เพิ่มพนักงานใหม่
-                </div>
+                <div class="card-hd"><i class="bi bi-person-plus-fill"></i> เพิ่มพนักงานใหม่</div>
                 <div class="input-row">
-                    <input type="text" id="newEmpName" class="input" placeholder="ชื่อพนักงาน" maxlength="20" /><button
-                        class="btn btn-primary" id="addEmpBtn">+ เพิ่ม</button>
+                    <input type="text" id="newEmpName" class="input" placeholder="ชื่อพนักงาน" maxlength="20" />
+                    <button class="btn btn-primary" id="addEmpBtn">+ เพิ่ม</button>
                 </div>
             </div>
             <div class="card">
                 <div class="section-hd">
                     <h2><i class="bi bi-people"></i> รายชื่อพนักงาน</h2>
                     <div style="display: flex; gap: 6px">
-                        <button class="btn btn-ghost btn-sm" id="resetDefaultEmps">
-                            คืนค่าเริ่มต้น</button><button class="btn btn-danger btn-sm" id="clearAllEmps">
-                            ล้างทั้งหมด
-                        </button>
+                        <button class="btn btn-ghost btn-sm" id="resetDefaultEmps">คืนค่าเริ่มต้น</button>
+                        <button class="btn btn-danger btn-sm" id="clearAllEmps">ล้างทั้งหมด</button>
                     </div>
                 </div>
                 <div id="empListContainer"></div>
@@ -1008,41 +1011,27 @@
         <div class="content">
             <div class="section-hd">
                 <h2><i class="bi bi-journal-bookmark-fill"></i> ประวัติการส่ง</h2>
-                <button class="btn btn-danger btn-sm" id="clearHistBtn">
-                    ล้างประวัติ
-                </button>
+                <button class="btn btn-danger btn-sm" id="clearHistBtn">ล้างประวัติ</button>
             </div>
             <div id="historyContainer"></div>
         </div>
     </div>
 
-    <!-- แท็บเกี่ยวกับ : ปรับปรุง footer ให้สวยงาม -->
     <div class="tab-panel" id="tab-about">
         <div class="content">
             <div class="footer-content" data-aos="fade-up" data-aos-duration="600">
                 <div class="about-card">
-                    <div class="app-icon-wrap">
-                        <img class="app-icon-img"
-                            src="https://i.supaimg.com/0bb45aa1-578e-4a4f-9427-4b59f2356d46/7c4af3c5-476d-45f4-b58e-dfd357b4d3cf.png"
-                            alt="Q-Plus Logo">
-                    </div>
+                    <div class="app-icon-wrap"><img class="app-icon-img" src="https://i.ibb.co/Y4nTRWzc/qplus-logo.png"
+                            alt="Q-Plus Logo" /></div>
                     <div class="app-name">คิวพลัส</div>
-                    <div class="app-desc">
-                        <span><i class="bi bi-grid-3x3-gap-fill"></i> จัดการคิวอัจฉริยะ</span>
-                        <span><i class="bi bi-people-fill"></i> รองรับทีมงาน</span>
+                    <div class="app-desc"><span><i class="bi bi-grid-3x3-gap-fill"></i> จัดการคิวอัจฉริยะ</span><span><i
+                                class="bi bi-people-fill"></i> รองรับทีมงาน</span></div>
+                    <div class="version-chip"><i class="bi bi-tag-fill"></i> เวอร์ชัน 12.0.0</div>
+                    <div class="update-info"><i class="fas fa-sync-alt fa-xs"></i><span>อัปเดตล่าสุด: 13/05/2569</span>
                     </div>
-                    <div class="version-chip">
-                        <i class="bi bi-tag-fill"></i> เวอร์ชัน 9.0.0
-                    </div>
-                    <div class="update-info">
-                        <i class="fas fa-sync-alt fa-xs"></i>
-                        <span>อัปเดตล่าสุด: 11/05/2569</span>
-                    </div>
-                    <div class="developer-credit">
-                        <span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span>
-                        <span><i class="bi bi-envelope-fill"></i> support@qplus.app</span>
-                        <span><i class="bi bi-shield-check"></i> ปลอดภัย</span>
-                    </div>
+                    <div class="developer-credit"><span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span><span><i
+                                class="bi bi-envelope-fill"></i> support@qplus.app</span><span><i
+                                class="bi bi-shield-check"></i> ปลอดภัย</span></div>
                 </div>
             </div>
         </div>
@@ -1050,14 +1039,10 @@
 
     <div class="modal-overlay" id="editModal">
         <div class="modal">
-            <div class="modal-title">
-                <i class="bi bi-pencil-square"></i> แก้ไขชื่อพนักงาน
-            </div>
+            <div class="modal-title"><i class="bi bi-pencil-square"></i> แก้ไขชื่อพนักงาน</div>
             <input type="text" id="editEmpInput" class="input" maxlength="20" />
-            <div class="modal-foot">
-                <button class="btn btn-ghost" id="editCancelBtn">ยกเลิก</button><button class="btn btn-primary"
-                    id="editSaveBtn">บันทึก</button>
-            </div>
+            <div class="modal-foot"><button class="btn btn-ghost" id="editCancelBtn">ยกเลิก</button><button
+                    class="btn btn-primary" id="editSaveBtn">บันทึก</button></div>
         </div>
     </div>
     <div class="toast" id="toast"></div>
@@ -1065,153 +1050,71 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         (function () {
-            // --- ค่าคงที่ ตำแหน่งทั้งหมด (เครื่อง 1-4, ตำแหน่งพับ, เครื่อง 8,7,5,6 ตามลำดับเดิม)
+            // ---------- CONFIG ----------
+            const firebaseConfig = {
+                apiKey: "AIzaSyBgYf7gCPJv07D1U9X33YS9_C_QsjA88bo",
+                authDomain: "qplus-63740.firebaseapp.com",
+                databaseURL: "https://qplus-63740-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "qplus-63740",
+                storageBucket: "qplus-63740.firebasestorage.app",
+                messagingSenderId: "806421881655",
+                appId: "1:806421881655:web:cf22c0f868415d2459b0b2"
+            };
+            const app = firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+            const stateRef = db.ref('/state');
+            const historyRef = db.ref('/history');
+
+            // ---------- CONSTANTS ----------
             const POSITIONS = [
-                { id: "machine1", label: "เครื่อง 1", icon: "⚙️" },
-                { id: "machine2", label: "เครื่อง 2", icon: "⚙️" },
-                { id: "machine3", label: "เครื่อง 3", icon: "⚙️" },
-                { id: "machine4", label: "เครื่อง 4", icon: "⚙️" },
+                { id: "machine1", label: "เครื่อง 001", icon: "⚙️" },
+                { id: "machine2", label: "เครื่อง 002", icon: "⚙️" },
+                { id: "machine3", label: "เครื่อง 003", icon: "⚙️" },
+                { id: "machine4", label: "เครื่อง 004", icon: "⚙️" },
                 { id: "foldPos", label: "ตำแหน่งพับ", icon: "📦" },
-                { id: "machine8", label: "เครื่อง 8", icon: "⚙️" },
-                { id: "machine7", label: "เครื่อง 7", icon: "⚙️" },
-                { id: "machine5", label: "เครื่อง 5", icon: "⚙️" },
-                { id: "machine6", label: "เครื่อง 6", icon: "⚙️" },
+                { id: "sealPos", label: "ตำแหน่งซีน", icon: "🔒" },
+                { id: "machine8", label: "เครื่อง 008", icon: "⚙️" },
+                { id: "machine7", label: "เครื่อง 007", icon: "⚙️" },
+                { id: "machine5", label: "เครื่อง 005", icon: "⚙️" },
+                { id: "machine6", label: "เครื่อง 006", icon: "⚙️" },
             ];
-            const DEFAULT_EMPS = [
-                "เก๋",
-                "ฝ้าย",
-                "หมอก",
-                "หมี",
-                "ยุ้ย",
-                "นิว",
-                "รัก",
-                "อ้อน",
-                "เตอร์",
-            ];
+            const DEFAULT_EMPS = ["เก๋", "ฝ้าย", "หมอก", "หมี", "ยุ้ย", "นิว", "รัก", "อ้อน", "เตอร์", "นุ่น"];
             const SW_KEY = "qplus_state";
 
+            // ---------- GLOBAL STATE ----------
             let state = {
                 employees: [...DEFAULT_EMPS],
                 selections: {},
-                history: [],
                 notes: "",
                 selectedDate: "",
-                activePositions: {}, // true=เปิด, false=ปิด (ถ้าไม่มี key ถือว่าเปิด)
+                activePositions: {},
+                lastUpdated: 0
             };
+            let historyArray = [];   // { key, message, dateLabel, savedAt, ts }
 
-            function saveState() {
-                const data = JSON.stringify(state);
-                if (
-                    "serviceWorker" in navigator &&
-                    navigator.serviceWorker.controller
-                ) {
-                    try {
-                        navigator.serviceWorker.controller.postMessage({
-                            type: "SAVE",
-                            key: SW_KEY,
-                            data,
-                        });
-                    } catch (_) { }
-                }
-                localStorage.setItem(SW_KEY, data);
-            }
+            // flags เพื่อป้องกัน loop sync
+            let _isSyncingFromFirebase = false;
 
-            async function loadState() {
-                try {
-                    const raw = localStorage.getItem(SW_KEY);
-                    if (raw) {
-                        const parsed = JSON.parse(raw);
-                        if (parsed && parsed.employees) {
-                            state = { ...state, ...parsed };
-                            if (!state.activePositions) state.activePositions = {};
-                        }
-                    }
-                } catch (_) { }
-                if (!state.selectedDate)
-                    state.selectedDate = new Date().toISOString().slice(0, 10);
-                if (!state.activePositions) state.activePositions = {};
-            }
+            // DOM elements shortcut
+            function el(id) { return document.getElementById(id); }
 
-            function updateSWStatus(online) {
-                const dot = document.getElementById("swDot");
-                const lbl = document.getElementById("swLabel");
-                if (dot) dot.className = "sw-dot" + (online ? " online" : "");
-                if (lbl) lbl.textContent = online ? "บันทึกอัตโนมัติ" : "โหมดออฟไลน์";
-            }
-
-            window.updateSWStatus = updateSWStatus;
-
-            function updateStatusSmart() {
-                const isOnline = navigator.onLine;
-                updateSWStatus(isOnline);
-            }
-
-            window.addEventListener("online", updateStatusSmart);
-            window.addEventListener("offline", updateStatusSmart);
-
-            // ตอนโหลด
-            updateStatusSmart();
-
-            async function registerSW() {
-                if (!("serviceWorker" in navigator)) {
-                    updateSWStatus(false);
-                    return;
-                }
-
-                try {
-                    await navigator.serviceWorker.register("sw.js");
-
-                    navigator.serviceWorker.addEventListener("message", (e) => {
-                        if (e.data?.type === "READY") {
-                            updateSWStatus(true);
-                        }
-                    });
-
-                } catch (err) {
-                    console.error(err);
-                    updateSWStatus(false);
-                }
-            }
-
-            function esc(str) {
-                if (!str) return "";
-                return str.replace(
-                    /[&<>"']/g,
-                    (m) =>
-                        ({
-                            "&": "&amp;",
-                            "<": "&lt;",
-                            ">": "&gt;",
-                            '"': "&quot;",
-                            "'": "&#39;",
-                        })[m],
-                );
-            }
-            function formatThaiDate(iso) {
-                const d = iso ? new Date(iso + "T00:00:00") : new Date();
-                return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getFullYear() + 543).slice(-2)}`;
-            }
-            function getTodayISO() {
-                const t = new Date();
-                return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
-            }
+            // helpers
+            function esc(str) { if (!str) return ""; return str.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]); }
+            function formatThaiDate(iso) { const d = iso ? new Date(iso + "T00:00:00") : new Date(); return `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1).toString().padStart(2, "0")}/${(d.getFullYear() + 543).toString().slice(-2)}`; }
+            function getTodayISO() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; }
             let toastTimer;
             function showToast(msg, type = "") {
-                const el = document.getElementById("toast");
-                if (!el) return;
-                el.textContent = msg;
-                el.className = "toast show" + (type ? " " + type : "");
+                const toastEl = el("toast");
+                if (!toastEl) return;
+                toastEl.textContent = msg;
+                toastEl.className = "toast show" + (type ? " " + type : "");
                 clearTimeout(toastTimer);
-                toastTimer = setTimeout(() => {
-                    el.className = "toast";
-                }, 2200);
+                toastTimer = setTimeout(() => { toastEl.className = "toast"; }, 2200);
             }
 
-            // ----- สร้างข้อความ (ข้ามตำแหน่งที่ปิด) -----
             function generateMessage() {
                 const date = state.selectedDate || getTodayISO();
                 let lines = [`วันที่ ${formatThaiDate(date)} จัดตำแหน่งตามนี้นะคะ`];
-                // เฉพาะตำแหน่งที่เปิด (active !== false)
                 for (const pos of POSITIONS) {
                     const isActive = state.activePositions[pos.id] !== false;
                     if (!isActive) continue;
@@ -1220,105 +1123,71 @@
                 }
                 lines.push(`*หมายเหตุ*`);
                 const rawNotes = state.notes.trim();
-                if (rawNotes)
-                    rawNotes.split(/\r?\n/).forEach((ln) => {
-                        const t = ln.trim();
-                        if (t) lines.push(t.startsWith("-") ? t : `- ${t}`);
-                    });
-                lines.push(
-                    `- เรื่อง OT ให้แจ้งก่อน 10:00/22:00 ผ่านหนูก่อนทุกครั้งนะคะ`,
-                );
+                if (rawNotes) rawNotes.split(/\r?\n/).forEach(ln => { const t = ln.trim(); if (t) lines.push(t.startsWith("-") ? t : `- ${t}`); });
+                lines.push(`- เรื่อง OT ให้แจ้งก่อน 13:00/01:00 นะคะ`);
                 return lines.join("\n");
             }
 
-            function renderStats() {
-                document.getElementById("stat-emp").textContent =
-                    state.employees.length;
-                document.getElementById("stat-pos").textContent = POSITIONS.length;
-                document.getElementById("stat-hist").textContent =
-                    state.history.length;
-                document.getElementById("empTabCount").textContent =
-                    state.employees.length;
-                document.getElementById("histTabCount").textContent =
-                    state.history.length;
-            }
+            function updatePreview() { const p = el("previewText"); if (p) p.textContent = generateMessage(); }
 
-            // toggle เปิด/ปิดตำแหน่ง
-            function toggleActive(posId) {
-                const current = state.activePositions[posId] !== false; // true = เปิด
-                if (current) {
-                    state.activePositions[posId] = false;
-                } else {
-                    delete state.activePositions[posId]; // ลบออก = เปิด (default true)
-                }
-                saveState();
-                renderAll(); // รีเฟรชทั้ง grid และ preview
-                showToast(
-                    current
-                        ? `ปิด ${POSITIONS.find((p) => p.id === posId)?.label || posId} แล้ว`
-                        : `เปิด ${POSITIONS.find((p) => p.id === posId)?.label || posId} แล้ว`,
-                    "success",
-                );
+            // ---------- RENDER FUNCTIONS ----------
+            function renderStats() {
+                el("stat-emp").textContent = state.employees.length;
+                el("stat-pos").textContent = POSITIONS.length;
+                el("stat-hist").textContent = historyArray.length;
+                el("empTabCount").textContent = state.employees.length;
+                el("histTabCount").textContent = historyArray.length;
             }
 
             function renderPositions() {
-                const c = document.getElementById("positionsContainer");
-                if (!c) return;
-                c.innerHTML = "";
-                POSITIONS.forEach((pos) => {
+                const container = el("positionsContainer");
+                if (!container) return;
+                container.innerHTML = "";
+                POSITIONS.forEach(pos => {
                     const isActive = state.activePositions[pos.id] !== false;
                     const currentEmp = state.selections[pos.id];
                     const card = document.createElement("div");
                     card.className = `pos-card ${isActive ? "" : "inactive"} ${currentEmp ? "assigned" : ""}`;
-                    const toggleIcon = isActive ? "bi-power" : "bi-power";
                     const toggleActiveClass = isActive ? "active" : "";
                     card.innerHTML = `
-                        <div class="pos-label">
-                            <span class="pos-icon">${pos.icon}</span>
-                            ${esc(pos.label)}
-                            <button class="btn btn-ghost btn-icon btn-sm btn-toggle-pos ${toggleActiveClass}" data-id="${pos.id}" title="${isActive ? "ปิดตำแหน่ง" : "เปิดตำแหน่ง"}"><i class="bi ${toggleIcon}"></i></button>
-                        </div>
-                        <select class="input" data-id="${pos.id}" ${!isActive ? "disabled" : ""}>
-                            ${state.employees.length === 0 ? "<option disabled>-- ไม่มีพนักงาน --</option>" : state.employees.map((e) => `<option value="${esc(e)}">${esc(e)}</option>`).join("")}
-                        </select>
-                    `;
+              <div class="pos-label">
+                <span class="pos-icon">${pos.icon}</span> ${esc(pos.label)}
+                <button class="btn btn-ghost btn-icon btn-sm btn-toggle-pos ${toggleActiveClass}" data-id="${pos.id}" title="${isActive ? "ปิดตำแหน่ง" : "เปิดตำแหน่ง"}"><i class="bi bi-power"></i></button>
+              </div>
+              <select class="input" data-id="${pos.id}" ${!isActive ? "disabled" : ""}>
+                ${state.employees.length === 0 ? "<option disabled>-- ไม่มีพนักงาน --</option>" : state.employees.map(e => `<option value="${esc(e)}">${esc(e)}</option>`).join("")}
+              </select>
+            `;
                     const sel = card.querySelector("select");
-                    if (currentEmp && state.employees.includes(currentEmp))
-                        sel.value = currentEmp;
-                    else if (state.employees.length && !currentEmp) {
-                        state.selections[pos.id] = state.employees[0];
-                        sel.value = state.employees[0];
-                    } else if (
-                        state.employees.length &&
-                        (!currentEmp || !state.employees.includes(currentEmp))
-                    ) {
-                        state.selections[pos.id] = state.employees[0];
-                        sel.value = state.employees[0];
-                    }
+                    if (currentEmp && state.employees.includes(currentEmp)) sel.value = currentEmp;
+                    else if (state.employees.length && !currentEmp) { state.selections[pos.id] = state.employees[0]; sel.value = state.employees[0]; }
+                    else if (state.employees.length && (!currentEmp || !state.employees.includes(currentEmp))) { state.selections[pos.id] = state.employees[0]; sel.value = state.employees[0]; }
                     if (isActive) {
                         sel.addEventListener("change", (e) => {
                             state.selections[pos.id] = e.target.value;
                             updatePreview();
-                            saveState();
-                            renderPositions();
+                            _saveStateToLocalAndFirebase();
+                            renderPositions(); // refresh เพื่อให้ badge แสดง assigned
                         });
                     }
                     const toggleBtn = card.querySelector(".btn-toggle-pos");
                     toggleBtn.addEventListener("click", (e) => {
                         e.stopPropagation();
-                        toggleActive(pos.id);
+                        const isActiveNow = state.activePositions[pos.id] !== false;
+                        if (isActiveNow) state.activePositions[pos.id] = false;
+                        else delete state.activePositions[pos.id];
+                        _saveStateToLocalAndFirebase();
+                        renderAll();
+                        showToast(isActiveNow ? `ปิด ${pos.label} แล้ว` : `เปิด ${pos.label} แล้ว`, isActiveNow ? "error" : "success");
                     });
-                    c.appendChild(card);
+                    container.appendChild(card);
                 });
             }
 
             function renderEmpList() {
-                const c = document.getElementById("empListContainer");
+                const c = el("empListContainer");
                 if (!c) return;
-                if (state.employees.length === 0) {
-                    c.innerHTML = `<div class="empty-state"><div class="ico">👤</div><p>ยังไม่มีพนักงาน<br>เพิ่มชื่อได้เลยด้านบน</p></div>`;
-                    return;
-                }
+                if (state.employees.length === 0) { c.innerHTML = `<div class="empty-state"><div class="ico">👤</div><p>ยังไม่มีพนักงาน<br>เพิ่มชื่อได้เลยด้านบน</p></div>`; return; }
                 const tbl = document.createElement("table");
                 tbl.className = "emp-table";
                 tbl.innerHTML = `<thead><tr><th>#</th><th>ชื่อพนักงาน</th><th>จัดการ</th></tr></thead>`;
@@ -1329,190 +1198,32 @@
                     tbody.appendChild(tr);
                 });
                 tbl.appendChild(tbody);
-                c.innerHTML = "";
-                c.appendChild(tbl);
-                c.querySelectorAll(".edit-emp").forEach((btn) =>
-                    btn.addEventListener("click", () =>
-                        openEditModal(parseInt(btn.dataset.idx)),
-                    ),
-                );
-                c.querySelectorAll(".del-emp").forEach((btn) =>
-                    btn.addEventListener("click", () =>
-                        deleteEmployee(parseInt(btn.dataset.idx)),
-                    ),
-                );
+                c.innerHTML = ""; c.appendChild(tbl);
+                c.querySelectorAll(".edit-emp").forEach(btn => btn.addEventListener("click", () => openEditModal(parseInt(btn.dataset.idx))));
+                c.querySelectorAll(".del-emp").forEach(btn => btn.addEventListener("click", () => deleteEmployee(parseInt(btn.dataset.idx))));
             }
 
             function renderHistory() {
-                const c = document.getElementById("historyContainer");
+                const c = el("historyContainer");
                 if (!c) return;
-                if (state.history.length === 0) {
-                    c.innerHTML = `<div class="empty-state"><i class="bi bi-journal-x"></i><p>ยังไม่มีประวัติ<br>กด 💾 ในแท็บจัดตำแหน่งเพื่อบันทึก</p></div>`;
-                    return;
-                }
+                if (historyArray.length === 0) { c.innerHTML = `<div class="empty-state"><i class="bi bi-journal-x"></i><p>ยังไม่มีประวัติ<br>กดปุ่มคัดลอกในแท็บจัดตำแหน่งเพื่อบันทึกอัตโนมัติ</p></div>`; return; }
                 c.innerHTML = "";
-                [...state.history].reverse().forEach((item, revIdx) => {
-                    const origIdx = state.history.length - 1 - revIdx;
+                [...historyArray].reverse().forEach(item => {
                     const div = document.createElement("div");
                     div.className = "card fade-in";
-                    div.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;"><div><span class="badge badge-orange"> ${esc(item.dateLabel)}</span><span style="font-size:0.7rem;margin-left:8px;">${esc(item.savedAt)}</span></div><div><button class="btn btn-ghost btn-sm hist-copy" data-msg="${esc(item.message)}"><i class="bi bi-clipboard"></i> คัดลอก</button><button class="btn btn-danger btn-sm hist-del" data-idx="${origIdx}"><i class="bi bi-trash"></i></button></div></div><div style="font-family:monospace;font-size:0.72rem;color:var(--text3);white-space:pre-wrap;line-height:1.5;max-height:auto;overflow:hidden;">${esc(item.message)}</div>`;
+                    div.innerHTML = `
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;">
+                <div><span class="badge badge-orange">${esc(item.dateLabel)}</span><span style="font-size:0.7rem;margin-left:8px;">${esc(item.savedAt)}</span></div>
+                <div><button class="btn btn-ghost btn-sm hist-copy" data-msg="${esc(item.message)}"><i class="bi bi-clipboard"></i> คัดลอก</button><button class="btn btn-danger btn-sm hist-del" data-key="${esc(item.key)}"><i class="bi bi-trash"></i></button></div>
+              </div>
+              <div style="font-family:monospace;font-size:0.72rem;color:var(--text3);white-space:pre-wrap;line-height:1.5;">${esc(item.message)}</div>
+            `;
                     c.appendChild(div);
                 });
-                c.querySelectorAll(".hist-copy").forEach((btn) =>
-                    btn.addEventListener("click", () => {
-                        navigator.clipboard
-                            .writeText(btn.dataset.msg)
-                            .then(() => showToast("คัดลอกแล้ว", "success"));
-                    }),
-                );
-                c.querySelectorAll(".hist-del").forEach((btn) =>
-                    btn.addEventListener("click", () => {
-                        const idx = parseInt(btn.dataset.idx);
-                        state.history.splice(idx, 1);
-                        saveState();
-                        renderHistory();
-                        renderStats();
-                    }),
-                );
+                c.querySelectorAll(".hist-copy").forEach(btn => btn.addEventListener("click", () => { navigator.clipboard.writeText(btn.dataset.msg).then(() => showToast("คัดลอกแล้ว", "success")); }));
+                c.querySelectorAll(".hist-del").forEach(btn => btn.addEventListener("click", () => { const key = btn.dataset.key; if (key) historyRef.child(key).remove().catch(e => showToast("ลบไม่สำเร็จ", "error")); }));
             }
 
-            function updatePreview() {
-                const el = document.getElementById("previewText");
-                if (el) el.textContent = generateMessage();
-            }
-
-            function addEmployee(name) {
-                const n = name.trim();
-                if (!n) {
-                    showToast("⚠️ กรุณากรอกชื่อ", "error");
-                    return false;
-                }
-                if (state.employees.includes(n)) {
-                    showToast("⚠️ มีชื่อนี้แล้ว", "error");
-                    return false;
-                }
-                state.employees.push(n);
-                POSITIONS.forEach((pos) => {
-                    if (!state.selections[pos.id]) state.selections[pos.id] = n;
-                });
-                saveState();
-                renderAll();
-                showToast(`✅ เพิ่ม "${n}" แล้ว`, "success");
-                return true;
-            }
-            function deleteEmployee(idx) {
-                if (state.employees.length <= 1) {
-                    showToast("⚠️ ต้องมีพนักงานอย่างน้อย 1 คน", "error");
-                    return;
-                }
-                const name = state.employees[idx];
-                state.employees.splice(idx, 1);
-                POSITIONS.forEach((pos) => {
-                    if (state.selections[pos.id] === name)
-                        state.selections[pos.id] = state.employees[0] || "";
-                });
-                saveState();
-                renderAll();
-                showToast(`🗑️ ลบ "${name}" แล้ว`);
-            }
-            let editingIdx = -1;
-            function openEditModal(idx) {
-                editingIdx = idx;
-                document.getElementById("editEmpInput").value = state.employees[idx];
-                document.getElementById("editModal").classList.add("open");
-                setTimeout(() => document.getElementById("editEmpInput").focus(), 10);
-            }
-            function closeEditModal() {
-                document.getElementById("editModal").classList.remove("open");
-                editingIdx = -1;
-            }
-            function saveEditEmployee() {
-                if (editingIdx < 0) return;
-                const newName = document.getElementById("editEmpInput").value.trim();
-                if (!newName) {
-                    showToast("⚠️ กรุณากรอกชื่อ", "error");
-                    return;
-                }
-                if (
-                    state.employees.includes(newName) &&
-                    newName !== state.employees[editingIdx]
-                ) {
-                    showToast("⚠️ มีชื่อนี้แล้ว", "error");
-                    return;
-                }
-                const oldName = state.employees[editingIdx];
-                state.employees[editingIdx] = newName;
-                POSITIONS.forEach((pos) => {
-                    if (state.selections[pos.id] === oldName)
-                        state.selections[pos.id] = newName;
-                });
-                closeEditModal();
-                saveState();
-                renderAll();
-                showToast(`✅ แก้ไข "${oldName}" → "${newName}"`, "success");
-            }
-            function validateSelections() {
-                if (!state.employees.length) return;
-                POSITIONS.forEach((pos) => {
-                    if (
-                        !state.selections[pos.id] ||
-                        !state.employees.includes(state.selections[pos.id])
-                    )
-                        state.selections[pos.id] = state.employees[0];
-                });
-            }
-            function saveToHistory() {
-                const msg = generateMessage();
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString("th-TH", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                });
-                const dateStr = now.toLocaleDateString("th-TH", {
-                    day: "numeric",
-                    month: "short",
-                    year: "2-digit",
-                });
-                state.history.push({
-                    message: msg,
-                    dateLabel: formatThaiDate(state.selectedDate || getTodayISO()),
-                    savedAt: `${dateStr} ${timeStr}`,
-                    ts: Date.now(),
-                });
-                if (state.history.length > 50) state.history.shift();
-                saveState();
-                renderHistory();
-                renderStats();
-                showToast("💾 บันทึกลงประวัติแล้ว", "success");
-            }
-            function exportData() {
-                const blob = new Blob([JSON.stringify(state, null, 2)], {
-                    type: "application/json",
-                });
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(blob);
-                a.download = `qplus_backup_${getTodayISO()}.json`;
-                a.click();
-                URL.revokeObjectURL(a.href);
-                showToast("💾 ส่งออกไฟล์แล้ว", "success");
-            }
-            function importData(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const parsed = JSON.parse(e.target.result);
-                        if (!parsed.employees) throw new Error();
-                        state = { ...state, ...parsed };
-                        if (!state.activePositions) state.activePositions = {};
-                        saveState();
-                        renderAll();
-                        showToast("📂 นำเข้าข้อมูลแล้ว", "success");
-                    } catch (_) {
-                        showToast("❌ ไฟล์ไม่ถูกต้อง", "error");
-                    }
-                };
-                reader.readAsText(file);
-            }
             function renderAll() {
                 validateSelections();
                 renderStats();
@@ -1521,149 +1232,326 @@
                 renderHistory();
                 updatePreview();
             }
-            function copyMessage() {
-                const msg = generateMessage();
-                navigator.clipboard
-                    .writeText(msg)
-                    .then(() => {
-                        const pb = document.getElementById("previewText");
-                        if (pb) {
-                            pb.classList.add("copied");
-                            setTimeout(() => pb.classList.remove("copied"), 600);
-                        }
-                        showToast("คัดลอกแล้ว!", "success");
-                    })
-                    .catch(() => showToast("ไม่สามารถคัดลอกได้", "error"));
+
+            function validateSelections() {
+                if (!state.employees.length) return;
+                for (const pos of POSITIONS) {
+                    if (!state.selections[pos.id] || !state.employees.includes(state.selections[pos.id]))
+                        state.selections[pos.id] = state.employees[0];
+                }
             }
 
-            async function init() {
-                await loadState();
-                document.getElementById("datePicker").value = state.selectedDate;
-                document.getElementById("notesTextarea").value = state.notes;
+            // ---------- SYNC with Firebase (Main State) ----------
+            function _saveStateToLocalAndFirebase() {
+                if (_isSyncingFromFirebase) return;
+                // อัปเดต lastUpdated
+                state.lastUpdated = Date.now();
+                // save localStorage
+                const toStore = { ...state, history: undefined }; // not store history in main state
+                localStorage.setItem(SW_KEY, JSON.stringify(toStore));
+                // ส่งไป Firebase (เฉพาะ main state)
+                stateRef.set({
+                    employees: state.employees,
+                    selections: state.selections,
+                    notes: state.notes,
+                    selectedDate: state.selectedDate,
+                    activePositions: state.activePositions,
+                    lastUpdated: state.lastUpdated
+                }).catch(err => console.warn("Firebase update error", err));
+            }
+
+            function listenMainState() {
+                stateRef.on('value', (snapshot) => {
+                    const fbState = snapshot.val();
+                    if (!fbState) return;
+                    // ถ้า timestamp ใน Firebase ใหม่กว่า หรือ local ไม่มี lastUpdated
+                    if (fbState.lastUpdated > (state.lastUpdated || 0)) {
+                        _isSyncingFromFirebase = true;
+                        // อัปเดต state ท้องถิ่น (ไม่ทับ history)
+                        state.employees = fbState.employees || [...DEFAULT_EMPS];
+                        state.selections = fbState.selections || {};
+                        state.notes = fbState.notes || "";
+                        state.selectedDate = fbState.selectedDate || getTodayISO();
+                        state.activePositions = fbState.activePositions || {};
+                        state.lastUpdated = fbState.lastUpdated;
+                        // บันทึกลง localStorage
+                        const toStore = { ...state, history: undefined };
+                        localStorage.setItem(SW_KEY, JSON.stringify(toStore));
+                        // รีเฟรช UI
+                        renderAll();
+                        // อัปเดตค่าในฟอร์ม
+                        el("datePicker").value = state.selectedDate;
+                        el("notesTextarea").value = state.notes;
+                        _isSyncingFromFirebase = false;
+                        showToast("ซิงค์ข้อมูลจาก雲แล้ว", "success");
+                    }
+                });
+            }
+
+            // ---------- HISTORY SYNC (realtime via onValue) ----------
+            function listenHistory() {
+                historyRef.on('value', (snapshot) => {
+                    const newHistory = [];
+                    snapshot.forEach(child => {
+                        newHistory.push({
+                            key: child.key,
+                            message: child.val().message,
+                            dateLabel: child.val().dateLabel,
+                            savedAt: child.val().savedAt,
+                            ts: child.val().ts || 0
+                        });
+                    });
+                    // เรียงตามเวลา
+                    newHistory.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+                    historyArray = newHistory;
+                    renderHistory();
+                    renderStats();
+                });
+            }
+
+            // ---------- ADD HISTORY (push to Firebase) ----------
+            function saveToHistory() {
+                const msg = generateMessage();
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" });
+                const dateStr = now.toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "2-digit" });
+                const historyItem = {
+                    message: msg,
+                    dateLabel: formatThaiDate(state.selectedDate || getTodayISO()),
+                    savedAt: `${dateStr} ${timeStr}`,
+                    ts: Date.now()
+                };
+                // push ไป Firebase -> trigger listenHistory อัตโนมัติ
+                historyRef.push(historyItem).catch(err => showToast("ไม่สามารถบันทึกประวัติ (ออฟไลน์?)", "error"));
+                showToast("บันทึกประวัติแล้ว", "success");
+            }
+
+            function copyMessage() {
+                const msg = generateMessage();
+                navigator.clipboard.writeText(msg).then(() => {
+                    showToast("คัดลอกข้อความแล้ว", "success");
+                    saveToHistory(); // บันทึกประวัติลง firebase
+                }).catch(() => showToast("ไม่สามารถคัดลอกได้", "error"));
+            }
+
+            // ---------- DATA IMPORT / EXPORT (with Firebase sync) ----------
+            function exportData() {
+                // export main state + history array
+                const exportObj = {
+                    mainState: {
+                        employees: state.employees,
+                        selections: state.selections,
+                        notes: state.notes,
+                        selectedDate: state.selectedDate,
+                        activePositions: state.activePositions,
+                        lastUpdated: state.lastUpdated
+                    },
+                    history: historyArray.map(h => ({ message: h.message, dateLabel: h.dateLabel, savedAt: h.savedAt, ts: h.ts }))
+                };
+                const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: "application/json" });
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = `qplus_backup_${getTodayISO()}.json`;
+                a.click();
+                URL.revokeObjectURL(a.href);
+                showToast("ส่งออกไฟล์แล้ว", "success");
+            }
+
+            function importData(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const parsed = JSON.parse(e.target.result);
+                        // รองรับทั้งแบบ old format (state ทั้งก้อน) และ new format { mainState, history }
+                        let mainImport = parsed.mainState ? parsed.mainState : parsed;
+                        if (!mainImport.employees) throw new Error("invalid format");
+                        // อัปเดต main state ไป Firebase
+                        const newMain = {
+                            employees: mainImport.employees,
+                            selections: mainImport.selections || {},
+                            notes: mainImport.notes || "",
+                            selectedDate: mainImport.selectedDate || getTodayISO(),
+                            activePositions: mainImport.activePositions || {},
+                            lastUpdated: Date.now()
+                        };
+                        _isSyncingFromFirebase = true;
+                        stateRef.set(newMain);
+                        // รอ Firebase sync แล้ว local จะถูกอัปเดตผ่าน listener
+                        // จัดการ history
+                        const histArray = parsed.history || [];
+                        if (histArray.length) {
+                            // ล้าง history เดิมทั้งหมด แล้ว push ทีละรายการ
+                            historyRef.remove().then(() => {
+                                const pushes = histArray.map(item => historyRef.push(item));
+                                return Promise.all(pushes);
+                            }).catch(e => console.warn);
+                        } else {
+                            historyRef.remove();
+                        }
+                        _isSyncingFromFirebase = false;
+                        showToast("นำเข้าข้อมูลและซิงค์เรียบร้อย", "success");
+                    } catch (err) { showToast("ไฟล์ไม่ถูกต้อง", "error"); }
+                };
+                reader.readAsText(file);
+            }
+
+            // ---------- EMPLOYEE MANAGEMENT ----------
+            function addEmployee(name) {
+                const n = name.trim();
+                if (!n) { showToast("กรุณากรอกชื่อ", "error"); return false; }
+                if (state.employees.includes(n)) { showToast("มีชื่อนี้แล้ว", "error"); return false; }
+                state.employees.push(n);
+                // กำหนดค่าเริ่มต้นให้ตำแหน่งที่ยังไม่มี
+                for (const pos of POSITIONS) if (!state.selections[pos.id]) state.selections[pos.id] = n;
+                _saveStateToLocalAndFirebase();
                 renderAll();
+                showToast(`เพิ่ม "${n}" แล้ว`, "success");
+                return true;
+            }
+            function deleteEmployee(idx) {
+                if (state.employees.length <= 1) { showToast("ต้องมีพนักงานอย่างน้อย 1 คน", "error"); return; }
+                const name = state.employees[idx];
+                state.employees.splice(idx, 1);
+                for (const pos of POSITIONS) if (state.selections[pos.id] === name) state.selections[pos.id] = state.employees[0] || "";
+                _saveStateToLocalAndFirebase();
+                renderAll();
+                showToast(`ลบ "${name}" แล้ว`, "success");
+            }
+            let editingIdx = -1;
+            function openEditModal(idx) { editingIdx = idx; el("editEmpInput").value = state.employees[idx]; el("editModal").classList.add("open"); setTimeout(() => el("editEmpInput").focus(), 10); }
+            function closeEditModal() { el("editModal").classList.remove("open"); editingIdx = -1; }
+            function saveEditEmployee() {
+                if (editingIdx < 0) return;
+                const newName = el("editEmpInput").value.trim();
+                if (!newName) { showToast("กรุณากรอกชื่อ", "error"); return; }
+                if (state.employees.includes(newName) && newName !== state.employees[editingIdx]) { showToast("มีชื่อนี้แล้ว", "error"); return; }
+                const oldName = state.employees[editingIdx];
+                state.employees[editingIdx] = newName;
+                for (const pos of POSITIONS) if (state.selections[pos.id] === oldName) state.selections[pos.id] = newName;
+                closeEditModal();
+                _saveStateToLocalAndFirebase();
+                renderAll();
+                showToast(`แก้ไข "${oldName}" → "${newName}"`, "success");
+            }
+
+            // ---------- RESET / CLEAR ----------
+            function resetDefaultEmps() {
+                if (confirm("รีเซ็ตรายชื่อพนักงานกลับตัวอย่างเริ่มต้น?")) {
+                    state.employees = [...DEFAULT_EMPS];
+                    state.selections = {};
+                    _saveStateToLocalAndFirebase();
+                    renderAll();
+                    showToast("↺ รีเซ็ตแล้ว", "success");
+                }
+            }
+            function clearAllEmps() {
+                if (confirm("ลบพนักงานทั้งหมด? (ต้องมีอย่างน้อย 1 คน)")) {
+                    if (state.employees.length === 0) return;
+                    state.employees = [];
+                    state.selections = {};
+                    _saveStateToLocalAndFirebase();
+                    renderAll();
+                    showToast("ล้างรายชื่อแล้ว", "success");
+                }
+            }
+            function clearHistory() {
+                if (confirm("ล้างประวัติทั้งหมด?")) { historyRef.remove().catch(e => showToast("ล้างไม่สำเร็จ", "error")); }
+            }
+
+            // ---------- LOAD INITIAL STATE (localStorage then Firebase) ----------
+            async function loadInitialState() {
+                // 1. โหลดจาก localStorage ก่อน
+                const raw = localStorage.getItem(SW_KEY);
+                if (raw) {
+                    try {
+                        const parsed = JSON.parse(raw);
+                        if (parsed && parsed.employees) {
+                            state.employees = parsed.employees;
+                            state.selections = parsed.selections || {};
+                            state.notes = parsed.notes || "";
+                            state.selectedDate = parsed.selectedDate || getTodayISO();
+                            state.activePositions = parsed.activePositions || {};
+                            state.lastUpdated = parsed.lastUpdated || 0;
+                        }
+                    } catch (e) { }
+                }
+                // 2. ตั้งค่าเริ่มต้นถ้ายังว่าง
+                if (!state.selectedDate) state.selectedDate = getTodayISO();
+                if (!state.activePositions) state.activePositions = {};
+                validateSelections();
+                // 3. เริ่มฟัง Firebase (จะเข้ามาแทนที่ถ้ามีข้อมูลใหม่กว่า)
+                listenMainState();
+                listenHistory();
+                // 4. render ครั้งแรก
+                renderAll();
+                el("datePicker").value = state.selectedDate;
+                el("notesTextarea").value = state.notes;
+            }
+
+            // ---------- SERVICE WORKER / ONLINE STATUS ----------
+            function updateSWStatus(online) { const dot = el("swDot"); const lbl = el("swLabel"); if (dot) dot.className = "sw-dot" + (online ? " online" : ""); if (lbl) lbl.textContent = online ? "บันทึกอัตโนมัติ" : "โหมดออฟไลน์"; }
+            window.updateSWStatus = updateSWStatus;
+            window.addEventListener("online", () => updateSWStatus(true));
+            window.addEventListener("offline", () => updateSWStatus(false));
+            async function registerSW() {
+                if (!("serviceWorker" in navigator)) { updateSWStatus(false); return; }
+                try {
+                    await navigator.serviceWorker.register("sw.js");
+                    navigator.serviceWorker.addEventListener("message", (e) => { if (e.data?.type === "READY") updateSWStatus(true); });
+                } catch (err) { updateSWStatus(false); }
+            }
+
+            // ---------- EVENT LISTENERS (DOM) ----------
+            function bindEvents() {
+                // tabs
+                document.querySelectorAll(".tab-btn").forEach(btn => btn.addEventListener("click", () => {
+                    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+                    btn.classList.add("active");
+                    el("tab-" + btn.dataset.tab).classList.add("active");
+                    AOS.refresh();
+                }));
+                el("datePicker").addEventListener("change", e => { state.selectedDate = e.target.value; updatePreview(); _saveStateToLocalAndFirebase(); });
+                el("todayBtn").addEventListener("click", () => { state.selectedDate = getTodayISO(); el("datePicker").value = state.selectedDate; updatePreview(); _saveStateToLocalAndFirebase(); });
+                el("notesTextarea").addEventListener("input", e => { state.notes = e.target.value; updatePreview(); _saveStateToLocalAndFirebase(); });
+                el("copyBtn").addEventListener("click", copyMessage);
+                el("copyBtnSmall").addEventListener("click", copyMessage);
+                el("addEmpBtn").addEventListener("click", () => { if (addEmployee(el("newEmpName").value)) el("newEmpName").value = ""; });
+                el("newEmpName").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); if (addEmployee(e.target.value)) e.target.value = ""; } });
+                el("resetDefaultEmps").addEventListener("click", resetDefaultEmps);
+                el("clearAllEmps").addEventListener("click", clearAllEmps);
+                el("clearHistBtn").addEventListener("click", clearHistory);
+                el("editCancelBtn").addEventListener("click", closeEditModal);
+                el("editSaveBtn").addEventListener("click", saveEditEmployee);
+                el("editEmpInput").addEventListener("keypress", e => { if (e.key === "Enter") saveEditEmployee(); });
+                el("editModal").addEventListener("click", e => { if (e.target === el("editModal")) closeEditModal(); });
+                el("exportBtn").addEventListener("click", exportData);
+                el("importBtn").addEventListener("click", () => el("importFile").click());
+                el("importFile").addEventListener("change", e => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ""; });
+                document.querySelectorAll(".quick-note-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        const note = btn.getAttribute("data-note") || btn.innerText.trim();
+                        if (!note) return;
+                        let lines = state.notes.split(/\r?\n/).filter(l => l.trim() !== "");
+                        const idx = lines.findIndex(l => l.trim() === note);
+                        if (idx !== -1) lines.splice(idx, 1);
+                        else lines.push(note);
+                        state.notes = lines.join("\n");
+                        el("notesTextarea").value = state.notes;
+                        updatePreview();
+                        _saveStateToLocalAndFirebase();
+                        showToast(idx !== -1 ? `ลบหมายเหตุ : ${note}` : `เพิ่มหมายเหตุ : ${note}`, idx !== -1 ? "error" : "success");
+                    });
+                });
+            }
+
+            // ---------- INIT ----------
+            async function init() {
+                await loadInitialState();
+                bindEvents();
                 registerSW();
                 AOS.init({ duration: 500, once: false });
-                document.querySelectorAll(".tab-btn").forEach((btn) =>
-                    btn.addEventListener("click", () => {
-                        document
-                            .querySelectorAll(".tab-btn")
-                            .forEach((b) => b.classList.remove("active"));
-                        document
-                            .querySelectorAll(".tab-panel")
-                            .forEach((p) => p.classList.remove("active"));
-                        btn.classList.add("active");
-                        document
-                            .getElementById("tab-" + btn.dataset.tab)
-                            .classList.add("active");
-                        AOS.refresh();
-                    }),
-                );
-                document
-                    .getElementById("datePicker")
-                    .addEventListener("change", (e) => {
-                        state.selectedDate = e.target.value;
-                        updatePreview();
-                        saveState();
-                    });
-                document.getElementById("todayBtn").addEventListener("click", () => {
-                    state.selectedDate = getTodayISO();
-                    document.getElementById("datePicker").value = state.selectedDate;
-                    updatePreview();
-                    saveState();
-                });
-                document
-                    .getElementById("notesTextarea")
-                    .addEventListener("input", (e) => {
-                        state.notes = e.target.value;
-                        updatePreview();
-                        saveState();
-                    });
-                document
-                    .getElementById("copyBtn")
-                    .addEventListener("click", copyMessage);
-                document
-                    .getElementById("copyBtnSmall")
-                    .addEventListener("click", copyMessage);
-                document
-                    .getElementById("saveHistBtn")
-                    .addEventListener("click", saveToHistory);
-                document.getElementById("addEmpBtn").addEventListener("click", () => {
-                    if (addEmployee(document.getElementById("newEmpName").value))
-                        document.getElementById("newEmpName").value = "";
-                });
-                document
-                    .getElementById("newEmpName")
-                    .addEventListener("keypress", (e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                            if (addEmployee(e.target.value)) e.target.value = "";
-                        }
-                    });
-                document
-                    .getElementById("resetDefaultEmps")
-                    .addEventListener("click", () => {
-                        if (confirm("รีเซ็ตรายชื่อพนักงานกลับตัวอย่างเริ่มต้น?")) {
-                            state.employees = [...DEFAULT_EMPS];
-                            state.selections = {};
-                            saveState();
-                            renderAll();
-                            showToast("↺ รีเซ็ตแล้ว");
-                        }
-                    });
-                document
-                    .getElementById("clearAllEmps")
-                    .addEventListener("click", () => {
-                        if (confirm("ลบพนักงานทั้งหมด? (ต้องมีอย่างน้อย 1 คน)")) {
-                            if (state.employees.length === 0) return;
-                            state.employees = [];
-                            state.selections = {};
-                            saveState();
-                            renderAll();
-                            showToast("🗑️ ล้างรายชื่อแล้ว");
-                        }
-                    });
-                document
-                    .getElementById("clearHistBtn")
-                    .addEventListener("click", () => {
-                        if (confirm("ล้างประวัติทั้งหมด?")) {
-                            state.history = [];
-                            saveState();
-                            renderHistory();
-                            renderStats();
-                            showToast("🗑️ ล้างประวัติแล้ว");
-                        }
-                    });
-                document
-                    .getElementById("editCancelBtn")
-                    .addEventListener("click", closeEditModal);
-                document
-                    .getElementById("editSaveBtn")
-                    .addEventListener("click", saveEditEmployee);
-                document
-                    .getElementById("editEmpInput")
-                    .addEventListener("keypress", (e) => {
-                        if (e.key === "Enter") saveEditEmployee();
-                    });
-                document
-                    .getElementById("editModal")
-                    .addEventListener("click", (e) => {
-                        if (e.target === document.getElementById("editModal"))
-                            closeEditModal();
-                    });
-                document
-                    .getElementById("exportBtn")
-                    .addEventListener("click", exportData);
-                document
-                    .getElementById("importBtn")
-                    .addEventListener("click", () =>
-                        document.getElementById("importFile").click(),
-                    );
-                document
-                    .getElementById("importFile")
-                    .addEventListener("change", (e) => {
-                        if (e.target.files[0]) importData(e.target.files[0]);
-                        e.target.value = "";
-                    });
+                updateSWStatus(navigator.onLine);
             }
             init();
         })();
