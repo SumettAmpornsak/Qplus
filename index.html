@@ -38,28 +38,95 @@
     <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-database-compat.js"></script>
 
     <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg,
+                    #f97316,
+                    #fb923c);
+
+            border-radius: 999px;
+        }
+
         /* (คงเดิมทั้งหมด ไม่เปลี่ยนแปลง) */
         :root {
-            --bg: #121212;
-            --surface: #1c1c1b;
-            --surface2: #222222;
-            --surface3: #2a2820;
-            --border: #302e24;
-            --border2: #3d3b2e;
+
+            /* Main Background */
+            --bg: #0f0f0f;
+            --surface: #171717;
+            --surface2: #1f1f1f;
+            --surface3: #262626;
+
+            /* Border */
+            --border: #2d2d2d;
+            --border2: #3a3a3a;
+
+            /* Orange Theme */
             --accent: #f97316;
             --accent2: #fb923c;
-            --accent3: #fbbf24;
-            --gold: #eab308;
-            --text: #f5f0e8;
-            --text2: #c8c0a8;
-            --text3: #8a8270;
-            --success: #1aa50d;
-            --danger: #f87171;
-            --blue: #60a5fa;
-            --radius: 14px;
-            --radius-lg: 20px;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --accent3: #fdba74;
+
+            /* Text */
+            --text: #f5f5f5;
+            --text2: #d4d4d4;
+            --text3: #8a8a8a;
+
+            /* Status */
+            --success: #22c55e;
+            --danger: #ef4444;
+            --blue: #3b82f6;
+
+            /* Radius */
+            --radius: 16px;
+            --radius-lg: 24px;
+
+            /* Shadow */
+            --shadow:
+                0 10px 30px rgba(0, 0, 0, 0.45);
+
+            /* Main Gradient */
+            --bg2: linear-gradient(230deg,
+                    #3a1b06 0%,
+                    #4a2207 10%,
+                    #602c0a 20%,
+                    #f97316 35%,
+                    #fb923c 50%,
+                    #602c0a 65%,
+                    #4a2207 80%,
+                    #3a1b06 100%);
         }
+
+        .glow-gold {
+            position: relative;
+            overflow: hidden;
+            background: var(--bg2);
+            background-size: 300% 300%;
+            animation: goldFlow 12s ease infinite;
+            box-shadow:
+                0 0 20px rgba(243, 198, 77, 0.15),
+                0 0 40px rgba(201, 123, 36, 0.1);
+        }
+
+        @keyframes goldFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
 
         * {
             margin: 0;
@@ -69,7 +136,7 @@
         }
 
         body {
-            background: var(--bg);
+            background: var(--bg2);
             font-family: "Kanit", system-ui, sans-serif;
             color: var(--text);
             min-height: 100vh;
@@ -116,15 +183,15 @@
             align-items: center;
             justify-content: center;
             font-size: 17px;
-            font-weight: 700;
-            color: #0f0e0b;
+            font-weight: 500;
+            color: #ffffff;
             letter-spacing: -1px;
             flex-shrink: 0;
         }
 
         .logo-text {
             font-size: 1.05rem;
-            font-weight: 700;
+            font-weight: 500;
             color: var(--text);
             letter-spacing: -0.3px;
         }
@@ -315,19 +382,39 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, var(--accent), var(--gold));
-            color: #0b0f0b;
+            background: linear-gradient(135deg,
+                    #ffb347,
+                    #ff8c42,
+                    #ffb347);
+
+            color: #000000;
             font-weight: 700;
             width: 100%;
             justify-content: center;
             padding: 0.9rem;
             font-size: 1rem;
             border-radius: var(--radius);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            box-shadow:
+                0 0 0 rgba(249, 115, 22, 0),
+                0 8px 20px rgba(249, 115, 22, 0.35);
+
+            transition: all .25s ease;
         }
 
         .btn-success:hover {
-            opacity: 0.92;
+            transform: translateY(-2px);
+            color: #ffffff;
+
+            box-shadow:
+                0 0 18px rgba(249, 115, 22, 0.45),
+                0 10px 25px rgba(249, 115, 22, 0.35);
+
+            filter: brightness(1.08);
         }
+
 
         .btn-sm {
             padding: 0.35rem 0.75rem;
@@ -1026,8 +1113,8 @@
                     <div class="app-name">คิวพลัส</div>
                     <div class="app-desc"><span><i class="bi bi-grid-3x3-gap-fill"></i> จัดการคิวอัจฉริยะ</span><span><i
                                 class="bi bi-people-fill"></i> รองรับทีมงาน</span></div>
-                    <div class="version-chip"><i class="bi bi-tag-fill"></i> เวอร์ชัน 12.0.0</div>
-                    <div class="update-info"><i class="fas fa-sync-alt fa-xs"></i><span>อัปเดตล่าสุด: 13/05/2569</span>
+                    <div class="version-chip"><i class="bi bi-tag-fill"></i> เวอร์ชัน 13.0.0</div>
+                    <div class="update-info"><i class="fas fa-sync-alt fa-xs"></i><span>อัปเดตล่าสุด: 14/05/2569</span>
                     </div>
                     <div class="developer-credit"><span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span><span><i
                                 class="bi bi-envelope-fill"></i> support@qplus.app</span><span><i
@@ -1283,7 +1370,7 @@
                         el("datePicker").value = state.selectedDate;
                         el("notesTextarea").value = state.notes;
                         _isSyncingFromFirebase = false;
-                        showToast("ซิงค์ข้อมูลจาก雲แล้ว", "success");
+                        showToast("ซิงค์ข้อมูลจากระบบแล้ว", "success");
                     }
                 });
             }
