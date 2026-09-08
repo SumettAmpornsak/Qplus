@@ -896,7 +896,7 @@
         border-radius: var(--radius-lg);
         padding: 1.5rem;
         width: 100%;
-        max-width: 400px;
+        max-width: 500px;
         transform: scale(0.95);
         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
@@ -1140,6 +1140,20 @@
           min-height: 48px;
           font-size: 0.95rem;
         }
+        #reportStats .stats-strip {
+          grid-template-columns: 1fr 1fr;
+        }
+        .stats-strip {
+          grid-template-columns: 1fr 1fr;
+        }
+        .report-grid-2 {
+          grid-template-columns: 1fr;
+        }
+        .modal {
+          max-width: 100%;
+          margin: 0.5rem;
+          padding: 1rem;
+        }
       }
 
       .fade-in {
@@ -1154,6 +1168,86 @@
           opacity: 1;
           transform: translateY(0);
         }
+      }
+
+      /* report custom */
+      #reportStats .stat-tile {
+        padding: 0.6rem 0.4rem;
+      }
+      #reportStats .stat-num {
+        font-size: 1.3rem;
+      }
+      #reportStats .stat-lbl {
+        font-size: 0.6rem;
+      }
+      .report-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .bar-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        color: var(--text2);
+        min-width: 60px;
+      }
+      .bar-track {
+        flex: 1;
+        height: 6px;
+        background: var(--surface3);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.4s;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+      }
+      .bar-stat {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text2);
+        min-width: 30px;
+        text-align: right;
+      }
+      .bar-pct {
+        font-size: 0.6rem;
+        color: var(--text3);
+        min-width: 32px;
+        text-align: right;
+      }
+      .history-note-item {
+        padding: 6px 8px;
+        background: var(--surface2);
+        border-radius: 6px;
+        border-left: 3px solid var(--accent);
+        margin-bottom: 6px;
+        font-size: 0.75rem;
+        color: var(--text2);
+        line-height: 1.4;
+      }
+      .history-note-item .meta {
+        font-size: 0.6rem;
+        color: var(--text3);
+        display: flex;
+        gap: 8px;
+        margin-bottom: 2px;
+      }
+      .emp-detail-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 6px;
+        background: var(--surface2);
+        border-radius: 6px;
+        margin-bottom: 4px;
+        transition: background 0.15s;
+      }
+      .emp-detail-row:hover {
+        background: var(--surface3);
       }
     </style>
   </head>
@@ -1208,6 +1302,9 @@
       <button class="tab-btn" data-tab="history">
         <i class="bi bi-clock-history"></i> ประวัติ
         <span class="tab-count" id="histTabCount">0</span>
+      </button>
+      <button class="tab-btn" data-tab="report">
+        <i class="bi bi-file-earmark-bar-graph"></i> รายงาน
       </button>
       <button class="tab-btn" data-tab="about">
         <i class="bi bi-info-circle-fill"></i> เกี่ยวกับ
@@ -1431,14 +1528,8 @@
           </div>
           <div id="empListContainer"></div>
           <div class="note" style="margin-top: 8px">
-            <i class="bi bi-info-circle"></i> ค่าเริ่มต้น (07/09/2026)<br>"หมอก", 
-          "หมี",
-          "รัก",
-          "เตอร์",
-          "นุ่น",
-          "ดาว",
-          "เต๋า",
-          "เอิร์น"
+            <i class="bi bi-info-circle"></i> ค่าเริ่มต้น (07/09/2026)<br />"หมอก",
+            "หมี", "รัก", "เตอร์", "นุ่น", "ดาว", "เต๋า", "เอิร์น"
           </div>
         </div>
       </div>
@@ -1457,6 +1548,158 @@
       </div>
     </div>
 
+    <!-- ===== TAB: REPORT ===== -->
+    <div class="tab-panel" id="tab-report">
+      <div class="content">
+        <!-- Summary Stats -->
+        <div class="stats-strip" id="reportStats">
+          <div class="stat-tile">
+            <div class="stat-num" id="rptTotalEmps">0</div>
+            <div class="stat-lbl">👤 พนักงานทั้งหมด</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-num" id="rptTotalPos">0</div>
+            <div class="stat-lbl">📋 ตำแหน่งทั้งหมด</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-num" id="rptActivePos">0</div>
+            <div class="stat-lbl">✅ เปิดใช้งาน</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-num" id="rptHistCount">0</div>
+            <div class="stat-lbl">📜 บันทึกประวัติ</div>
+          </div>
+        </div>
+
+        <!-- Employee Assignment Frequency (current) -->
+        <div class="card">
+          <div class="card-hd">
+            <i class="bi bi-person-lines-fill"></i>
+            การมอบหมายพนักงาน (ปัจจุบัน)
+            <span class="badge badge-orange badge-sm" style="margin-left: auto"
+              >เรียงจากมากไปน้อย</span
+            >
+          </div>
+          <div id="rptEmpAssignment" style="min-height: 40px">
+            <div class="empty-state" style="padding: 1rem">
+              <div class="ico">📊</div>
+              <p>ยังไม่มีข้อมูลการมอบหมาย</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine Usage from History -->
+        <div class="card">
+          <div class="card-hd">
+            <i class="bi bi-bar-chart-fill"></i>
+            สถิติการใช้งานเครื่อง (จากประวัติ)
+            <span class="badge badge-orange badge-sm" style="margin-left: auto"
+              >นับจากข้อความที่บันทึก</span
+            >
+          </div>
+          <div id="rptMachineUsage" style="min-height: 40px">
+            <div class="empty-state" style="padding: 1rem">
+              <div class="ico">📊</div>
+              <p>ยังไม่มีประวัติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Assignment from History (CLICKABLE) -->
+        <div class="card">
+          <div class="card-hd">
+            <i class="bi bi-person-check-fill"></i>
+            สถิติการมอบหมายพนักงาน (จากประวัติ)
+            <span class="badge badge-orange badge-sm" style="margin-left: auto"
+              >คลิกชื่อเพื่อดูรายละเอียด</span
+            >
+          </div>
+          <div id="rptEmployeeHistoryStats" style="min-height: 40px">
+            <div class="empty-state" style="padding: 1rem">
+              <div class="ico">📊</div>
+              <p>ยังไม่มีประวัติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Notes from History -->
+        <div class="card">
+          <div class="card-hd">
+            <i class="bi bi-sticky-fill"></i>
+            หมายเหตุที่ใช้ล่าสุด (จากประวัติ)
+            <span class="badge badge-orange badge-sm" style="margin-left: auto"
+              >5 รายการล่าสุด</span
+            >
+          </div>
+          <div id="rptRecentNotes" style="min-height: 40px">
+            <div class="empty-state" style="padding: 1rem">
+              <div class="ico">📭</div>
+              <p>ยังไม่มีหมายเหตุในประวัติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Position Type Breakdown & Active Positions -->
+        <div class="report-grid-2">
+          <div class="card">
+            <div class="card-hd">
+              <i class="bi bi-pie-chart-fill"></i>
+              ประเภทตำแหน่ง
+            </div>
+            <div id="rptPosTypeBreakdown" style="min-height: 40px">
+              <div class="empty-state" style="padding: 1rem">
+                <div class="ico">📊</div>
+                <p>ไม่มีข้อมูล</p>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd">
+              <i class="bi bi-check2-circle"></i>
+              ตำแหน่งที่เปิดใช้งาน
+            </div>
+            <div id="rptActivePosList" style="min-height: 40px">
+              <div class="empty-state" style="padding: 1rem">
+                <div class="ico">📭</div>
+                <p>ไม่มีตำแหน่งที่เปิดใช้งาน</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Summary / Recent Activity -->
+        <div class="card">
+          <div class="card-hd">
+            <i class="bi bi-clock-history"></i>
+            กิจกรรมล่าสุด
+            <span class="badge badge-orange badge-sm" style="margin-left: auto"
+              >5 รายการล่าสุด</span
+            >
+          </div>
+          <div id="rptRecentHistory" style="min-height: 40px">
+            <div class="empty-state" style="padding: 1rem">
+              <div class="ico">📭</div>
+              <p>ยังไม่มีประวัติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Refresh Button -->
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+          "
+        >
+          <button class="btn btn-ghost btn-sm" id="refreshReportBtn">
+            <i class="bi bi-arrow-clockwise"></i> รีเฟรชข้อมูล
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- ===== TAB: ABOUT ===== -->
     <div class="tab-panel" id="tab-about">
       <div class="content">
@@ -1472,20 +1715,25 @@
             <div class="app-name">คิวพลัส</div>
             <div class="app-desc">
               <span
-                ><i class="bi bi-grid-3x3-gap-fill"></i> จัดการลำดับคิวอัจฉริยะ</span
+                ><i class="bi bi-grid-3x3-gap-fill"></i>
+                จัดการลำดับคิวอัจฉริยะ</span
               ><span><i class="bi bi-people-fill"></i> รองรับทีมงานหลายคน</span>
-              <span><i class="bi bi-arrow-repeat"></i> บันทึกอัตโนมัติตลอดเวลา</span>
+              <span
+                ><i class="bi bi-arrow-repeat"></i>
+                บันทึกอัตโนมัติตลอดเวลา</span
+              >
             </div>
             <div class="version-chip">
-              <i class="bi bi-tag-fill"></i> เวอร์ชัน 14.9.0
+              <i class="bi bi-tag-fill"></i> เวอร์ชัน 15.9.0
             </div>
             <div class="update-info">
               <i class="fas fa-sync-alt fa-xs"></i
-              ><span>อัปเดตล่าสุด: 07/09/2569</span>
+              ><span>อัปเดตล่าสุด: 08/09/2569</span>
             </div>
             <div class="developer-credit">
               <span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span
-              ><span><i class="bi bi-globe"></i> Sumettampornsak.vercel.app</span
+              ><span
+                ><i class="bi bi-globe"></i> Sumettampornsak.vercel.app</span
               ><span><i class="bi bi-shield-check"></i> ปลอดภัย</span>
             </div>
           </div>
@@ -1493,7 +1741,7 @@
       </div>
     </div>
 
-    <!-- ===== MODAL ===== -->
+    <!-- ===== MODAL: Edit Employee ===== -->
     <div class="modal-overlay" id="editModal">
       <div class="modal">
         <div class="modal-title">
@@ -1503,6 +1751,24 @@
         <div class="modal-foot">
           <button class="btn btn-ghost" id="editCancelBtn">ยกเลิก</button>
           <button class="btn btn-primary" id="editSaveBtn">บันทึก</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MODAL: Employee Detail (NEW) ===== -->
+    <div class="modal-overlay" id="empDetailModal">
+      <div class="modal">
+        <div class="modal-title" id="empDetailTitle">
+          <i class="bi bi-person-badge"></i> รายละเอียดพนักงาน
+        </div>
+        <div
+          id="empDetailBody"
+          style="max-height: 420px; overflow-y: auto; padding-right: 4px"
+        >
+          <!-- dynamic content -->
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" id="empDetailCloseBtn">ปิด</button>
         </div>
       </div>
     </div>
@@ -1614,7 +1880,7 @@
           "นุ่น",
           "ดาว",
           "เต๋า",
-          "เอิร์น"
+          "เอิร์น",
         ];
         const SW_KEY = "qplus_state";
 
@@ -1742,6 +2008,47 @@
           if (p) p.textContent = generateMessage();
         }
 
+        // ---------- PARSE HISTORY MESSAGE ----------
+        function parseHistoryMessage(msg) {
+          const lines = msg.split(/\r?\n/);
+          const positions = [];
+          const notes = [];
+          let inNotes = false;
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            if (
+              trimmed.startsWith("*หมายเหตุ*") ||
+              trimmed.startsWith("หมายเหตุ")
+            ) {
+              inNotes = true;
+              continue;
+            }
+            if (inNotes) {
+              if (trimmed.startsWith("-")) {
+                notes.push(trimmed.replace(/^-\s*/, "").trim());
+              } else {
+                if (
+                  !trimmed.startsWith("วันที่") &&
+                  !trimmed.startsWith("เรื่อง OT")
+                ) {
+                  notes.push(trimmed);
+                }
+              }
+              continue;
+            }
+            if (trimmed.includes(":")) {
+              const parts = trimmed.split(":");
+              if (parts.length >= 2) {
+                const label = parts[0].trim();
+                const employee = parts.slice(1).join(":").trim();
+                positions.push({ label, employee });
+              }
+            }
+          }
+          return { positions, notes };
+        }
+
         // ---------- RENDER ----------
         function renderStats() {
           el("stat-emp").textContent = state.employees.length;
@@ -1769,17 +2076,14 @@
             const icon = getPosIcon(pos);
 
             const card = document.createElement("div");
-            card.className =
-              `pos-card ${isActive ? "" : "inactive"} ${currentEmp ? "assigned" : ""}`;
+            card.className = `pos-card ${isActive ? "" : "inactive"} ${currentEmp ? "assigned" : ""}`;
 
-            // Top
             const top = document.createElement("div");
             top.className = "pos-top";
 
             const iconLabel = document.createElement("span");
             iconLabel.className = "pos-icon-label";
-            iconLabel.innerHTML =
-              `<span class="pos-icon">${icon}</span> ${esc(label)}`;
+            iconLabel.innerHTML = `<span class="pos-icon">${icon}</span> ${esc(label)}`;
             top.appendChild(iconLabel);
 
             const actions = document.createElement("div");
@@ -1790,10 +2094,8 @@
             typeBadge.textContent = TYPE_LABELS[pos.type] || pos.type;
             actions.appendChild(typeBadge);
 
-            // Toggle
             const toggleBtn = document.createElement("button");
-            toggleBtn.className =
-              `btn btn-ghost btn-sm ${isActive ? "active" : ""}`;
+            toggleBtn.className = `btn btn-ghost btn-sm ${isActive ? "active" : ""}`;
             toggleBtn.title = isActive ? "ปิดตำแหน่ง" : "เปิดตำแหน่ง";
             toggleBtn.innerHTML = `<i class="bi bi-power"></i>`;
             toggleBtn.addEventListener("click", (e) => {
@@ -1809,7 +2111,6 @@
             });
             actions.appendChild(toggleBtn);
 
-            // Delete
             const delBtn = document.createElement("button");
             delBtn.className = "btn btn-danger btn-sm";
             delBtn.innerHTML = `<i class="bi bi-trash"></i>`;
@@ -1970,8 +2271,7 @@
           const tbody = document.createElement("tbody");
           state.employees.forEach((emp, idx) => {
             const tr = document.createElement("tr");
-            tr.innerHTML =
-              `<td><div class="emp-num">${idx + 1}</div></td><td><span class="emp-name">${esc(emp)}</span></td><td style="text-align:right"><button class="btn btn-ghost btn-sm edit-emp" data-idx="${idx}"><i class="bi bi-pencil"></i></button><button class="btn btn-danger btn-sm del-emp" data-idx="${idx}"><i class="bi bi-x-lg"></i></button></td>`;
+            tr.innerHTML = `<td><div class="emp-num">${idx + 1}</div></td><td><span class="emp-name">${esc(emp)}</span></td><td style="text-align:right"><button class="btn btn-ghost btn-sm edit-emp" data-idx="${idx}"><i class="bi bi-pencil"></i></button><button class="btn btn-danger btn-sm del-emp" data-idx="${idx}"><i class="bi bi-x-lg"></i></button></td>`;
             tbody.appendChild(tr);
           });
           tbl.appendChild(tbody);
@@ -2015,9 +2315,7 @@
               const txt = this.getAttribute("data-msg") || "";
               copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
             });
-            // Also touch for mobile
             btn.addEventListener("touchstart", function (e) {
-              // prevent double-firing on mobile
               if (!this._touched) {
                 this._touched = true;
                 const txt = this.getAttribute("data-msg") || "";
@@ -2038,12 +2336,381 @@
           );
         }
 
+        // ---------- EMPLOYEE DETAIL (NEW) ----------
+        function getEmployeePositionStats(employeeName) {
+          const stats = {};
+          for (const item of historyArray) {
+            const parsed = parseHistoryMessage(item.message);
+            for (const pos of parsed.positions) {
+              if (pos.employee === employeeName) {
+                const label = pos.label;
+                stats[label] = (stats[label] || 0) + 1;
+              }
+            }
+          }
+          return stats;
+        }
+
+        function showEmployeeDetail(employeeName) {
+          const stats = getEmployeePositionStats(employeeName);
+          const title = document.getElementById("empDetailTitle");
+          const body = document.getElementById("empDetailBody");
+
+          if (title) {
+            title.innerHTML = `<i class="bi bi-person-badge"></i> รายละเอียด: ${esc(employeeName)}`;
+          }
+
+          if (Object.keys(stats).length === 0) {
+            body.innerHTML = `
+                <div class="empty-state" style="padding:1rem;">
+                  <div class="ico">📭</div>
+                  <p>ไม่พบประวัติการมอบหมายของ ${esc(employeeName)}</p>
+                </div>
+              `;
+          } else {
+            const sorted = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+            const maxCount = sorted[0]?.[1] || 1;
+            let html = `<div style="display:flex;flex-direction:column;gap:6px;padding:4px 0;">`;
+            sorted.forEach(([label, count]) => {
+              const pct = Math.round((count / maxCount) * 100);
+              html += `
+                  <div class="emp-detail-row">
+                    <span style="font-size:0.85rem;min-width:100px;color:var(--text2);">${esc(label)}</span>
+                    <div style="flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;">
+                      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width 0.4s;"></div>
+                    </div>
+                    <span style="font-size:0.8rem;font-weight:600;color:var(--text);min-width:36px;text-align:right;">${count}</span>
+                    <span style="font-size:0.65rem;color:var(--text3);min-width:32px;text-align:right;">${pct}%</span>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            body.innerHTML = html;
+          }
+
+          document.getElementById("empDetailModal").classList.add("open");
+        }
+
+        // ---------- RENDER REPORT (enhanced) ----------
+        function renderReport() {
+          // Summary stats
+          const totalEmps = state.employees.length;
+          const totalPos = state.positions.length;
+          const activePos = state.positions.filter(
+            (p) => p.active !== false,
+          ).length;
+          const histCount = historyArray.length;
+
+          el("rptTotalEmps").textContent = totalEmps;
+          el("rptTotalPos").textContent = totalPos;
+          el("rptActivePos").textContent = activePos;
+          el("rptHistCount").textContent = histCount;
+
+          // ---- Employee Assignment (current) ----
+          const empAssignment = {};
+          for (const pos of state.positions) {
+            if (pos.active === false) continue;
+            const emp = state.selections[pos.id];
+            if (emp && state.employees.includes(emp)) {
+              empAssignment[emp] = (empAssignment[emp] || 0) + 1;
+            }
+          }
+          const sortedEmps = Object.entries(empAssignment).sort(
+            (a, b) => b[1] - a[1],
+          );
+
+          const rptEmpContainer = el("rptEmpAssignment");
+          if (sortedEmps.length === 0) {
+            rptEmpContainer.innerHTML = `
+                <div class="empty-state" style="padding:1rem;">
+                  <div class="ico">👤</div>
+                  <p>ยังไม่มีพนักงานหรือการมอบหมาย</p>
+                </div>
+              `;
+          } else {
+            let html = `<table class="emp-table">
+                <thead><tr><th>#</th><th>ชื่อพนักงาน</th><th>จำนวนตำแหน่ง</th><th>สถานะ</th></tr></thead><tbody>`;
+            let maxCount = sortedEmps[0]?.[1] || 0;
+            sortedEmps.forEach(([name, count], idx) => {
+              const pct =
+                maxCount > 0 ? Math.round((count / maxCount) * 100) : 0;
+              const barColor =
+                pct >= 80
+                  ? "var(--accent)"
+                  : pct >= 50
+                    ? "var(--accent2)"
+                    : "var(--text3)";
+              html += `
+                  <tr>
+                    <td><div class="emp-num">${idx + 1}</div></td>
+                    <td><span style="font-weight:500;">${esc(name)}</span></td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-weight:600;color:var(--text);">${count}</span>
+                        <div style="flex:1;height:6px;background:var(--surface3);border-radius:4px;overflow:hidden;max-width:80px;">
+                          <div style="width:${pct}%;height:100%;background:${barColor};border-radius:4px;transition:width 0.4s;"></div>
+                        </div>
+                        <span style="font-size:0.6rem;color:var(--text3);">${pct}%</span>
+                      </div>
+                    </td>
+                    <td>${count > 0 ? '<span class="badge badge-orange badge-sm">✅ ใช้งาน</span>' : '<span class="badge" style="background:var(--surface3);color:var(--text3);">⏸️</span>'}</td>
+                  </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            rptEmpContainer.innerHTML = html;
+          }
+
+          // ---- Machine Usage from History ----
+          const machineUsage = {};
+          const empHistoryCount = {};
+          const allNotes = [];
+
+          for (const item of historyArray) {
+            const parsed = parseHistoryMessage(item.message);
+            for (const p of parsed.positions) {
+              if (p.label.startsWith("เครื่อง")) {
+                machineUsage[p.label] = (machineUsage[p.label] || 0) + 1;
+              }
+              if (
+                p.employee &&
+                p.employee !== "(ไม่ได้กำหนด)" &&
+                state.employees.includes(p.employee)
+              ) {
+                empHistoryCount[p.employee] =
+                  (empHistoryCount[p.employee] || 0) + 1;
+              }
+            }
+            if (parsed.notes.length > 0) {
+              allNotes.push({
+                notes: parsed.notes,
+                dateLabel: item.dateLabel || "",
+                savedAt: item.savedAt || "",
+                ts: item.ts || 0,
+              });
+            }
+          }
+
+          // Machine Usage
+          const sortedMachines = Object.entries(machineUsage).sort(
+            (a, b) => b[1] - a[1],
+          );
+          const rptMachine = el("rptMachineUsage");
+          if (sortedMachines.length === 0) {
+            rptMachine.innerHTML = `
+                <div class="empty-state" style="padding:1rem;">
+                  <div class="ico">📊</div>
+                  <p>ยังไม่มีประวัติการใช้งานเครื่อง</p>
+                </div>
+              `;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:6px;">`;
+            const maxMachine = sortedMachines[0]?.[1] || 1;
+            sortedMachines.forEach(([label, count]) => {
+              const pct = Math.round((count / maxMachine) * 100);
+              html += `
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:0.8rem;min-width:80px;color:var(--text2);">${esc(label)}</span>
+                    <div style="flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;">
+                      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width 0.4s;"></div>
+                    </div>
+                    <span style="font-size:0.75rem;font-weight:600;color:var(--text2);min-width:36px;text-align:right;">${count}</span>
+                    <span style="font-size:0.6rem;color:var(--text3);min-width:32px;">${pct}%</span>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            rptMachine.innerHTML = html;
+          }
+
+          // ---- Employee History Stats (CLICKABLE) ----
+          const sortedEmpHist = Object.entries(empHistoryCount).sort(
+            (a, b) => b[1] - a[1],
+          );
+          const rptEmpHist = el("rptEmployeeHistoryStats");
+          if (sortedEmpHist.length === 0) {
+            rptEmpHist.innerHTML = `
+                <div class="empty-state" style="padding:1rem;">
+                  <div class="ico">👤</div>
+                  <p>ยังไม่มีข้อมูลการมอบหมายจากประวัติ</p>
+                </div>
+              `;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:6px;">`;
+            const maxEmp = sortedEmpHist[0]?.[1] || 1;
+            sortedEmpHist.forEach(([name, count]) => {
+              const pct = Math.round((count / maxEmp) * 100);
+              html += `
+                  <div style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 6px;border-radius:6px;background:var(--surface2);transition:background 0.15s;border:1px solid transparent;"
+                       onclick="window._showEmployeeDetail('${esc(name)}')"
+                       onmouseover="this.style.borderColor='var(--accent)';this.style.background='var(--surface3)';"
+                       onmouseout="this.style.borderColor='transparent';this.style.background='var(--surface2)';">
+                    <span style="font-size:0.8rem;min-width:60px;color:var(--text2);font-weight:500;text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--accent);">${esc(name)}</span>
+                    <div style="flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;">
+                      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:4px;transition:width 0.4s;"></div>
+                    </div>
+                    <span style="font-size:0.75rem;font-weight:600;color:var(--text2);min-width:36px;text-align:right;">${count}</span>
+                    <span style="font-size:0.6rem;color:var(--text3);min-width:32px;text-align:right;">${pct}%</span>
+                    <span style="font-size:0.7rem;color:var(--accent);"><i class="bi bi-chevron-right"></i></span>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            rptEmpHist.innerHTML = html;
+          }
+
+          // ---- Recent Notes from History ----
+          const rptNotes = el("rptRecentNotes");
+          const sortedNotes = allNotes.sort((a, b) => b.ts - a.ts).slice(0, 5);
+          if (sortedNotes.length === 0) {
+            rptNotes.innerHTML = `
+                <div class="empty-state" style="padding:1rem;">
+                  <div class="ico">📭</div>
+                  <p>ยังไม่มีหมายเหตุในประวัติ</p>
+                </div>
+              `;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:4px;">`;
+            for (const noteGroup of sortedNotes) {
+              const notesText = noteGroup.notes.join(", ");
+              html += `
+                  <div class="history-note-item">
+                    <div class="meta">
+                      <span><i class="bi bi-calendar"></i> ${esc(noteGroup.dateLabel || "")}</span>
+                      <span><i class="bi bi-clock"></i> ${esc(noteGroup.savedAt || "")}</span>
+                    </div>
+                    <div>${esc(notesText)}</div>
+                  </div>
+                `;
+            }
+            html += `</div>`;
+            rptNotes.innerHTML = html;
+          }
+
+          // ---- Position type breakdown ----
+          const typeCount = {};
+          for (const pos of state.positions) {
+            const t = pos.type || "custom";
+            typeCount[t] = (typeCount[t] || 0) + 1;
+          }
+          const typeLabels = {
+            machine: "⚙️ เครื่อง",
+            fold: "📦 พับ",
+            seal: "🔒 ซีน",
+            custom: "🎯 อื่นๆ",
+          };
+          const rptTypeContainer = el("rptPosTypeBreakdown");
+          const typeEntries = Object.entries(typeCount);
+          if (typeEntries.length === 0) {
+            rptTypeContainer.innerHTML = `<div class="empty-state" style="padding:1rem;"><div class="ico">📊</div><p>ไม่มีข้อมูล</p></div>`;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:6px;">`;
+            const totalTypes = typeEntries.reduce((s, [, c]) => s + c, 0);
+            typeEntries.sort((a, b) => b[1] - a[1]);
+            typeEntries.forEach(([type, count]) => {
+              const pct =
+                totalTypes > 0 ? Math.round((count / totalTypes) * 100) : 0;
+              const label = typeLabels[type] || type;
+              html += `
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:0.8rem;min-width:80px;color:var(--text2);">${label}</span>
+                    <div style="flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;">
+                      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width 0.4s;"></div>
+                    </div>
+                    <span style="font-size:0.75rem;font-weight:600;color:var(--text2);min-width:36px;text-align:right;">${count}</span>
+                    <span style="font-size:0.6rem;color:var(--text3);min-width:32px;">${pct}%</span>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            rptTypeContainer.innerHTML = html;
+          }
+
+          // ---- Active positions list ----
+          const activePositions = state.positions.filter(
+            (p) => p.active !== false,
+          );
+          const rptActiveList = el("rptActivePosList");
+          if (activePositions.length === 0) {
+            rptActiveList.innerHTML = `<div class="empty-state" style="padding:1rem;"><div class="ico">📭</div><p>ไม่มีตำแหน่งที่เปิดใช้งาน</p></div>`;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:4px;max-height:200px;overflow-y:auto;padding-right:4px;">`;
+            activePositions.forEach((pos) => {
+              const label = getPosLabel(pos);
+              const icon = getPosIcon(pos);
+              const emp = state.selections[pos.id] || "(ว่าง)";
+              const isAssigned =
+                emp !== "(ว่าง)" && state.employees.includes(emp);
+              html += `
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 6px;border-radius:6px;background:var(--surface3);border-left:3px solid ${isAssigned ? "var(--accent)" : "var(--border2)"};">
+                    <span style="font-size:0.8rem;display:flex;align-items:center;gap:6px;">
+                      <span>${icon}</span>
+                      <span style="color:var(--text2);">${esc(label)}</span>
+                    </span>
+                    <span style="font-size:0.75rem;color:${isAssigned ? "var(--accent2)" : "var(--text3)"};font-weight:500;">
+                      ${isAssigned ? "👤 " + esc(emp) : "⏸️ ว่าง"}
+                    </span>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            rptActiveList.innerHTML = html;
+          }
+
+          // ---- Recent history ----
+          const rptRecent = el("rptRecentHistory");
+          const recent = [...historyArray].reverse().slice(0, 5);
+          if (recent.length === 0) {
+            rptRecent.innerHTML = `<div class="empty-state" style="padding:1rem;"><div class="ico">📭</div><p>ยังไม่มีประวัติ</p></div>`;
+          } else {
+            let html = `<div style="display:flex;flex-direction:column;gap:8px;">`;
+            recent.forEach((item) => {
+              const preview =
+                item.message.length > 120
+                  ? item.message.slice(0, 120) + "…"
+                  : item.message;
+              html += `
+                  <div style="padding:8px 10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;">
+                      <span style="font-size:0.65rem;color:var(--text3);">
+                        <i class="bi bi-calendar"></i> ${esc(item.dateLabel || "")}
+                        <i class="bi bi-clock" style="margin-left:8px;"></i> ${esc(item.savedAt || "")}
+                      </span>
+                      <button class="btn btn-ghost btn-sm hist-copy" data-msg="${esc(item.message)}" style="font-size:0.6rem;padding:0.15rem 0.5rem;min-height:28px;">
+                        <i class="bi bi-clipboard"></i> คัดลอก
+                      </button>
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--text3);white-space:pre-wrap;line-height:1.4;font-family:monospace;">${esc(preview)}</div>
+                  </div>
+                `;
+            });
+            html += `</div>`;
+            rptRecent.innerHTML = html;
+
+            rptRecent.querySelectorAll(".hist-copy").forEach((btn) => {
+              btn.addEventListener("click", function () {
+                const txt = this.getAttribute("data-msg") || "";
+                copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
+              });
+              btn.addEventListener("touchstart", function (e) {
+                if (!this._touched) {
+                  this._touched = true;
+                  const txt = this.getAttribute("data-msg") || "";
+                  copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
+                  setTimeout(() => (this._touched = false), 300);
+                }
+              });
+            });
+          }
+        }
+
         function renderAll() {
           validateSelections();
           renderStats();
           renderPositions();
           renderEmpList();
           renderHistory();
+          renderReport();
           updatePreview();
         }
 
@@ -2163,6 +2830,10 @@
             historyArray = newHistory;
             renderHistory();
             renderStats();
+            const reportPanel = el("tab-report");
+            if (reportPanel && reportPanel.classList.contains("active")) {
+              renderReport();
+            }
           });
         }
 
@@ -2186,12 +2857,14 @@
           };
           historyRef
             .push(historyItem)
-            .catch(() => showToast("ไม่สามารถบันทึกประวัติ (ออฟไลน์?)", "error"));
+            .catch(() =>
+              showToast("ไม่สามารถบันทึกประวัติ (ออฟไลน์?)", "error"),
+            );
           showToast("บันทึกประวัติแล้ว", "success");
         }
 
         // ============================================================
-        //  🔥 FIXED: COPY FUNCTION with fallback for mobile
+        //  COPY FUNCTION
         // ============================================================
         function copyTextToClipboard(text, successMsg, errorMsg) {
           if (!text) {
@@ -2199,30 +2872,25 @@
             return;
           }
 
-          // Method 1: Clipboard API (modern browsers, HTTPS)
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard
               .writeText(text)
               .then(() => {
                 showToast(successMsg || "คัดลอกข้อความแล้ว", "success");
-                // Auto-save history only for main copy actions
                 if (successMsg && successMsg.includes("คัดลอกข้อความ")) {
                   saveToHistory();
                 }
               })
               .catch(() => {
-                // Fallback to execCommand
                 fallbackCopy(text, successMsg, errorMsg);
               });
           } else {
-            // Clipboard API not available
             fallbackCopy(text, successMsg, errorMsg);
           }
         }
 
         function fallbackCopy(text, successMsg, errorMsg) {
           try {
-            // Create temporary textarea
             const textarea = document.createElement("textarea");
             textarea.value = text;
             textarea.setAttribute("readonly", "");
@@ -2235,7 +2903,6 @@
             textarea.style.pointerEvents = "none";
             document.body.appendChild(textarea);
 
-            // Select and copy
             textarea.select();
             textarea.setSelectionRange(0, text.length);
             const success = document.execCommand("copy");
@@ -2247,14 +2914,19 @@
                 saveToHistory();
               }
             } else {
-              showToast(errorMsg || "ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง", "error");
+              showToast(
+                errorMsg || "ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง",
+                "error",
+              );
             }
           } catch (err) {
-            showToast(errorMsg || "ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง", "error");
+            showToast(
+              errorMsg || "ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง",
+              "error",
+            );
           }
         }
 
-        // Main copy function used by the two big copy buttons
         function copyMessage() {
           const msg = generateMessage();
           copyTextToClipboard(
@@ -2527,7 +3199,11 @@
                 .querySelectorAll(".tab-panel")
                 .forEach((p) => p.classList.remove("active"));
               btn.classList.add("active");
-              el("tab-" + btn.dataset.tab).classList.add("active");
+              const panel = el("tab-" + btn.dataset.tab);
+              panel.classList.add("active");
+              if (btn.dataset.tab === "report") {
+                renderReport();
+              }
               AOS.refresh();
             }),
           );
@@ -2553,19 +3229,15 @@
           });
 
           // ---- COPY BUTTONS ----
-          // Use both click and touchstart for mobile reliability
           const copyBtn = el("copyBtn");
           const copyBtnSmall = el("copyBtnSmall");
 
           function attachCopyHandler(btn) {
             if (!btn) return;
-            // Remove any existing listeners to avoid duplicates
             btn.removeEventListener("click", copyMessage);
             btn.removeEventListener("touchstart", copyMessage);
-            // Add both
             btn.addEventListener("click", copyMessage);
             btn.addEventListener("touchstart", function (e) {
-              // Prevent double-firing on mobile
               if (!this._touched) {
                 this._touched = true;
                 copyMessage();
@@ -2578,7 +3250,8 @@
 
           // Employees
           el("addEmpBtn").addEventListener("click", () => {
-            if (addEmployee(el("newEmpName").value)) el("newEmpName").value = "";
+            if (addEmployee(el("newEmpName").value))
+              el("newEmpName").value = "";
           });
           el("newEmpName").addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
@@ -2598,6 +3271,16 @@
           });
           el("editModal").addEventListener("click", (e) => {
             if (e.target === el("editModal")) closeEditModal();
+          });
+
+          // Employee Detail Modal (NEW)
+          el("empDetailCloseBtn").addEventListener("click", () => {
+            el("empDetailModal").classList.remove("open");
+          });
+          el("empDetailModal").addEventListener("click", (e) => {
+            if (e.target === el("empDetailModal")) {
+              el("empDetailModal").classList.remove("open");
+            }
           });
 
           // Import/Export
@@ -2682,7 +3365,6 @@
                 idx !== -1 ? "error" : "success",
               );
             });
-            // Also touch for mobile
             btn.addEventListener("touchstart", function (e) {
               if (!this._touched) {
                 this._touched = true;
@@ -2690,6 +3372,12 @@
                 setTimeout(() => (this._touched = false), 300);
               }
             });
+          });
+
+          // Refresh report button
+          el("refreshReportBtn").addEventListener("click", () => {
+            renderReport();
+            showToast("รีเฟรชข้อมูลรายงานแล้ว", "success");
           });
         }
 
@@ -2701,7 +3389,9 @@
           AOS.init({ duration: 500, once: false });
           updateSWStatus(navigator.onLine);
 
-          // Fix add position initial visibility
+          // Expose function to window for onclick
+          window._showEmployeeDetail = showEmployeeDetail;
+
           const at = el("addPosType");
           const ac = el("addPosCustomLabel");
           const an = el("addPosNumber");
