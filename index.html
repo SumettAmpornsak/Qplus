@@ -1395,9 +1395,6 @@
               <div class="preview-dot"></div>
               ตัวอย่างข้อความ
             </div>
-            <button class="btn btn-ghost btn-sm" id="copyBtnSmall">
-              <i class="bi bi-clipboard-check"></i> คัดลอก
-            </button>
           </div>
           <div class="preview-body" id="previewText">กำลังโหลด...</div>
         </div>
@@ -1528,8 +1525,8 @@
           </div>
           <div id="empListContainer"></div>
           <div class="note" style="margin-top: 8px">
-            <i class="bi bi-info-circle"></i> ค่าเริ่มต้น (07/09/2026)<br />"หมอก",
-            "หมี", "รัก", "เตอร์", "นุ่น", "ดาว", "เต๋า", "เอิร์น"
+            <i class="bi bi-info-circle"></i> ค่าเริ่มต้น (ล่าสุด) <br />
+            (อัปเดตอัตโนมัติตามการเปลี่ยนแปลงและซิงค์ข้ามเครื่อง)
           </div>
         </div>
       </div>
@@ -1724,11 +1721,11 @@
               >
             </div>
             <div class="version-chip">
-              <i class="bi bi-tag-fill"></i> เวอร์ชัน 15.9.0
+              <i class="bi bi-tag-fill"></i> เวอร์ชัน 16.0.0
             </div>
             <div class="update-info">
               <i class="fas fa-sync-alt fa-xs"></i
-              ><span>อัปเดตล่าสุด: 08/09/2569</span>
+              ><span>อัปเดตล่าสุด: 09/09/2569</span>
             </div>
             <div class="developer-credit">
               <span><i class="bi bi-code-slash"></i> Sumett Ampornsak</span
@@ -1797,6 +1794,8 @@
         const db = firebase.database();
         const stateRef = db.ref("/state");
         const historyRef = db.ref("/history");
+        const defaultEmpsRef = db.ref("/defaultEmps");
+        let _isUpdatingDefaultEmps = false;
 
         // ---------- DEFAULTS ----------
         const DEFAULT_POSITIONS = [
@@ -1872,7 +1871,7 @@
           },
         ];
 
-        const DEFAULT_EMPS = [
+        let DEFAULT_EMPS = [
           "หมอก",
           "หมี",
           "รัก",
@@ -1881,7 +1880,19 @@
           "ดาว",
           "เต๋า",
           "เอิร์น",
+          "โอ๋"
         ];
+        // โหลดค่าเริ่มต้นที่บันทึกไว้ล่าสุดจาก localStorage
+        const savedDefault = localStorage.getItem("qplus_default_emps");
+        if (savedDefault) {
+          try {
+            const parsed = JSON.parse(savedDefault);
+            if (Array.isArray(parsed) && parsed.length) {
+              DEFAULT_EMPS = parsed;
+            }
+          } catch (_) {}
+        }
+
         const SW_KEY = "qplus_state";
 
         const TYPE_ICONS = {
@@ -2047,6 +2058,16 @@
             }
           }
           return { positions, notes };
+        }
+
+        // ---------- UPDATE DEFAULT EMPS ----------
+        function updateDefaultEmps() {
+          DEFAULT_EMPS = [...state.employees];
+          localStorage.setItem("qplus_default_emps", JSON.stringify(DEFAULT_EMPS));
+          _isUpdatingDefaultEmps = true;
+          defaultEmpsRef.set(DEFAULT_EMPS)
+            .then(() => { _isUpdatingDefaultEmps = false; })
+            .catch(() => { _isUpdatingDefaultEmps = false; });
         }
 
         // ---------- RENDER ----------
@@ -2314,14 +2335,6 @@
             btn.addEventListener("click", function () {
               const txt = this.getAttribute("data-msg") || "";
               copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
-            });
-            btn.addEventListener("touchstart", function (e) {
-              if (!this._touched) {
-                this._touched = true;
-                const txt = this.getAttribute("data-msg") || "";
-                copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
-                setTimeout(() => (this._touched = false), 300);
-              }
             });
           });
           c.querySelectorAll(".hist-del").forEach((btn) =>
@@ -2692,14 +2705,6 @@
                 const txt = this.getAttribute("data-msg") || "";
                 copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
               });
-              btn.addEventListener("touchstart", function (e) {
-                if (!this._touched) {
-                  this._touched = true;
-                  const txt = this.getAttribute("data-msg") || "";
-                  copyTextToClipboard(txt, "คัดลอกข้อความประวัติแล้ว");
-                  setTimeout(() => (this._touched = false), 300);
-                }
-              });
             });
           }
         }
@@ -2808,6 +2813,7 @@
               el("datePicker").value = state.selectedDate;
               el("notesTextarea").value = state.notes;
               renderAll();
+              updateDefaultEmps(); // ซิงค์ค่าเริ่มต้นให้ตรงกับ current
               _isSyncingFromFirebase = false;
               showToast("ซิงค์ข้อมูลจากระบบแล้ว", "success");
             }
@@ -3031,6 +3037,7 @@
             if (!state.selections[pos.id]) state.selections[pos.id] = n;
           }
           _saveStateToLocalAndFirebase();
+          updateDefaultEmps();
           renderAll();
           showToast(`เพิ่ม "${n}" แล้ว`, "success");
           return true;
@@ -3049,6 +3056,7 @@
             }
           }
           _saveStateToLocalAndFirebase();
+          updateDefaultEmps();
           renderAll();
           showToast(`ลบ "${name}" แล้ว`, "success");
         }
@@ -3089,6 +3097,7 @@
           }
           closeEditModal();
           _saveStateToLocalAndFirebase();
+          updateDefaultEmps();
           renderAll();
           showToast(`แก้ไข "${oldName}" → "${newName}"`, "success");
         }
@@ -3100,6 +3109,7 @@
               state.selections[pos.id] = state.employees[0] || "";
             }
             _saveStateToLocalAndFirebase();
+            updateDefaultEmps();
             renderAll();
             showToast("↺ รีเซ็ตแล้ว", "success");
           }
@@ -3111,6 +3121,7 @@
             state.employees = [];
             state.selections = {};
             _saveStateToLocalAndFirebase();
+            updateDefaultEmps();
             renderAll();
             showToast("ล้างรายชื่อแล้ว", "success");
           }
@@ -3159,6 +3170,7 @@
           renderAll();
           el("datePicker").value = state.selectedDate;
           el("notesTextarea").value = state.notes;
+          updateDefaultEmps(); // ตั้งค่าเริ่มต้นให้ตรงกับ current
         }
 
         // ---------- SW ----------
@@ -3228,22 +3240,14 @@
             _saveStateToLocalAndFirebase();
           });
 
-          // ---- COPY BUTTONS ----
+          // ---- COPY BUTTONS (ไม่มี touchstart) ----
           const copyBtn = el("copyBtn");
           const copyBtnSmall = el("copyBtnSmall");
 
           function attachCopyHandler(btn) {
             if (!btn) return;
             btn.removeEventListener("click", copyMessage);
-            btn.removeEventListener("touchstart", copyMessage);
             btn.addEventListener("click", copyMessage);
-            btn.addEventListener("touchstart", function (e) {
-              if (!this._touched) {
-                this._touched = true;
-                copyMessage();
-                setTimeout(() => (this._touched = false), 300);
-              }
-            });
           }
           attachCopyHandler(copyBtn);
           attachCopyHandler(copyBtnSmall);
@@ -3344,11 +3348,11 @@
             else if (type === "custom") addCustom.value = "";
           });
 
-          // Quick notes
+          // Quick notes (ไม่มี touchstart)
           document.querySelectorAll(".quick-note-btn").forEach((btn) => {
-            btn.addEventListener("click", () => {
+            btn.addEventListener("click", function () {
               const note =
-                btn.getAttribute("data-note") || btn.innerText.trim();
+                this.getAttribute("data-note") || this.innerText.trim();
               if (!note) return;
               let lines = state.notes
                 .split(/\r?\n/)
@@ -3364,13 +3368,6 @@
                 idx !== -1 ? `ลบหมายเหตุ : ${note}` : `เพิ่มหมายเหตุ : ${note}`,
                 idx !== -1 ? "error" : "success",
               );
-            });
-            btn.addEventListener("touchstart", function (e) {
-              if (!this._touched) {
-                this._touched = true;
-                this.click();
-                setTimeout(() => (this._touched = false), 300);
-              }
             });
           });
 
@@ -3391,6 +3388,16 @@
 
           // Expose function to window for onclick
           window._showEmployeeDetail = showEmployeeDetail;
+
+          // ซิงค์ค่าเริ่มต้นข้ามเครื่อง
+          defaultEmpsRef.on("value", (snapshot) => {
+            if (_isUpdatingDefaultEmps) return;
+            const val = snapshot.val();
+            if (val && Array.isArray(val) && val.length) {
+              DEFAULT_EMPS = val;
+              localStorage.setItem("qplus_default_emps", JSON.stringify(DEFAULT_EMPS));
+            }
+          });
 
           const at = el("addPosType");
           const ac = el("addPosCustomLabel");
